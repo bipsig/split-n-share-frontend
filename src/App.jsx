@@ -13,6 +13,7 @@ import Activity from './pages/Activity'
 import Reports from './pages/Reports'
 import ProtectedRoute from './routes/ProtectedRoute'
 import SideBar from './components/common/SideBar'
+import PublicRoute from './routes/PublicRoute'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -25,12 +26,17 @@ const App = () => {
           element: <LandingPage />
         },
         {
-          path: 'login',
-          element: <Login />
-        },
-        {
-          path: 'register',
-          element: <Register />
+          element: <PublicRoute />,
+          children: [
+            {
+              path: 'login',
+              element: <Login />
+            },
+            {
+              path: 'register',
+              element: <Register />
+            },
+          ]
         },
         {
           path: 'user',
