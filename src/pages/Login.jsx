@@ -24,13 +24,13 @@ const Login = () => {
       const result = await dispatch(loginUser(credentials)).unwrap();
 
       console.log(result);
+      if (result.success) {
+        navigate('/user/dashboard')
+      }
     }
     catch (err) {
       console.error('Error:', err);
     }
-    // finally {
-    //   navigate('/user/dashboard');
-    // }
   }
 
   return (

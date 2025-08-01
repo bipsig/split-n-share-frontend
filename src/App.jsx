@@ -11,6 +11,8 @@ import Groups from './pages/Groups'
 import GroupPage from './pages/GroupPage'
 import Activity from './pages/Activity'
 import Reports from './pages/Reports'
+import ProtectedRoute from './routes/ProtectedRoute'
+import SideBar from './components/common/SideBar'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -31,6 +33,7 @@ const App = () => {
         },
         {
           path: 'user',
+          element: <ProtectedRoute />,
           children: [
             {
               index: true,
