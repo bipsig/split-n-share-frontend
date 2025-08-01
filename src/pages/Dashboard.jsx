@@ -1,28 +1,28 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getUserDetails, userActions } from '../redux/slices/userSlice';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const username = useSelector(state => state.user.username)
-  const accessToken = useSelector(state => state.user.token);
-  const userData = useSelector(state => state.user.userData);
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const username = useSelector(state => state.user.username)
+  // const accessToken = useSelector(state => state.user.token);
+  // const userData = useSelector(state => state.user.userData);
 
-  const handleGetDetails = async () => {
-    try {
-          const result = await dispatch(getUserDetails(accessToken)).unwrap();
-          console.log('Success:', result);
-          console.log (result.data);
-        }
-        catch (err) {
-          console.error('Error:', err);
-        }
-  }
+  // const handleGetDetails = async () => {
+  //   try {
+  //         const result = await dispatch(getUserDetails(accessToken)).unwrap();
+  //         console.log('Success:', result);
+  //         console.log (result.data);
+  //       }
+  //       catch (err) {
+  //         console.error('Error:', err);
+  //       }
+  // }
   return (
     <div>
-      DashBoard
+      Dashboard
+      {/* DashBoard
       {username ? (
         <div>
           <p>{`User is logged in => ${username}`}</p>
@@ -34,7 +34,7 @@ const Dashboard = () => {
           )}
         </div>
       ) : <p>No user logged in</p>}
-      <button onClick={() => {navigate('/login'); dispatch(userActions.handleLogout())}}>Logout</button>
+      <button onClick={() => {navigate('/login'); dispatch(userActions.handleLogout())}}>Logout</button> */}
     </div>
   )
 }

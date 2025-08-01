@@ -18,7 +18,7 @@ const LandingPage = () => {
         </h1>
 
         <p className="text-gray-600 text-lg leading-relaxed">
-          We’re building something awesome for you! The landing page is currently under construction, but we’ll be up and running soon.
+          We're building something awesome for you! The landing page is currently under construction, but we'll be up and running soon.
         </p>
 
         <div className="mt-10">
