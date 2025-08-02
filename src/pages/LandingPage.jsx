@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from "@/components/ui/button"
 import { Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,9 +23,9 @@ const LandingPage = () => {
         </p>
 
         <div className="mt-10">
-          <button onClick={() => navigate('/login')}className="bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-2 rounded-md transition">
+          <Button onClick={() => navigate('/login')}>
             Go to Login
-          </button>
+          </Button>
         </div>
       </div>
     </div>
