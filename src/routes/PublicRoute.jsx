@@ -1,11 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
-const PublicRoute = () => {
-  const { isAuthenticated } = useSelector(state => state.auth);
+const PublicRoute = ({ children }) => {
+  const { authIsAuthenticated } = useAuth();
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to='/user/dashboard' replace /> 
+  return !authIsAuthenticated ? <Outlet /> : <Navigate to='/user/dashboard' replace /> 
   
 }
 

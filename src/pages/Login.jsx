@@ -1,13 +1,12 @@
 import React, { useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../redux/slices/auth/authThunks';
+import useAuth from '../hooks/useAuth';
 
 const Login = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isAuthenticated, loading, error, message } = useSelector(state => state.auth)
+  const { authLogin, authIsAuthenticated, authLoading, authError, authMessage } = useAuth();
 
   const username = useRef();
   const password = useRef();
@@ -21,7 +20,7 @@ const Login = () => {
     };
 
     try {
-      const result = await dispatch(loginUser(credentials)).unwrap();
+      const result = await authLogin(credentials).unwrap();
 
       console.log(result);
       if (result.success) {
@@ -58,13 +57,13 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            disabled={loading}
+            disabled={authLoading}
           >
-            {loading ? "Logging in" : "Login" }
+            {authLoading ? "Logging in" : "Login" }
           </button>
         </form>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {message && isAuthenticated && <p style={{ color: 'green' }}>{message}</p>}
+        {authError && <p style={{ color: 'red' }}>{authError}</p>}
+        {authMessage && authIsAuthenticated && <p style={{ color: 'green' }}>{authMessage}</p>}
       </div>
     </div>
   )

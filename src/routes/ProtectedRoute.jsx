@@ -1,11 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const { authIsAuthenticated } = useAuth();
 
-  return isAuthenticated ? children : <Navigate to='/login' replace /> 
+  return authIsAuthenticated ? children : <Navigate to='/login' replace /> 
   
 }
 
