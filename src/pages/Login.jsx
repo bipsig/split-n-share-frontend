@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../redux/slices/authSlice';
+import { loginUser } from '../redux/slices/auth/authThunks';
 
 const Login = () => {
   const dispatch = useDispatch();
