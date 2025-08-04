@@ -14,6 +14,7 @@ import Reports from './pages/Reports'
 import ProtectedRoute from './routes/ProtectedRoute'
 import SideBar from './components/common/SideBar'
 import PublicRoute from './routes/PublicRoute'
+import UserSidebar from './components/common/UserSidebar/UserSidebar'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -40,7 +41,7 @@ const App = () => {
         },
         {
           path: 'user',
-          element: <ProtectedRoute />,
+          element: <ProtectedRoute> <UserSidebar /> </ProtectedRoute>,
           children: [
             {
               index: true,
