@@ -1,25 +1,15 @@
 import { useDispatch, useSelector } from "react-redux"
-import { authenticated, error, loading, message, token } from "../redux/slices/auth/authSelectors";
-import { loginUser } from "../redux/slices/auth/authThunks";
+import { selectCurrentToken, selectIsAuthenticated } from "../redux/slices/auth/authSelectors";
 
 const useAuth = () => {
   const dispatch = useDispatch();
 
-  const authToken = useSelector(token);
-  const authIsAuthenticated = useSelector(authenticated);
-  const authLoading = useSelector(loading);
-  const authError = useSelector(error);
-  const authMessage = useSelector(message);
-
-  const authLogin = (credentials) => dispatch(loginUser(credentials));
+  const authToken = useSelector(selectCurrentToken);
+  const authIsAuthenticated = useSelector(selectIsAuthenticated);
 
   return {
     authToken,
     authIsAuthenticated,
-    authLoading,
-    authError,
-    authMessage,
-    authLogin
   };
 }
 

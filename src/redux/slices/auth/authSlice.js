@@ -1,13 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser } from "./authThunks";
+import { authApi } from "../api/authApi";
 
 
 const initialState = {
   token: null,
   isAuthenticated: false,
-  loading: false,
-  error: null,
-  message: null 
 };
 
 const authSlice = createSlice({
@@ -17,26 +14,14 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.message = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = true;
-        state.error = null;
-        state.message = action.payload.message;
-        state.token = action.payload.data.accessToken
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = false;
-        state.error = action.payload;
-        state.message = null;
-        state.token = null;
-      })
-  }
+      .addMatcher(
+        authApi.endpoints.login.matchFulfilled, (state, action) => {
+          const { data } = action.payload;
+          state.token = data.accessToken;
+          state.isAuthenticated = true;
+        }
+      )
+  },
 });
 
 export const authActions = authSlice.actions;

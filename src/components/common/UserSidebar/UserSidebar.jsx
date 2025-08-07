@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Activity, ChartLine, ChevronDown, LayoutDashboard, LogOut, Logs, User, UsersRound } from 'lucide-react';
+import { Activity, ChartLine, ChevronDown, ChevronUp, LayoutDashboard, LogOut, Logs, User, UsersRound } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 import SidebarItem from './SidebarItem';
 
@@ -62,7 +62,7 @@ const UserSidebar = () => {
           >
             <User className="w-6 h-6 text-gray-300" />
             <div className="flex-1 text-left text-sm font-medium">Username</div>
-            <ChevronDown className="w-4 h-4" />
+            {menuOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
           </button>
 
           {menuOpen && (
