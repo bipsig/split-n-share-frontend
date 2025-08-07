@@ -4,6 +4,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { useGetUserGroupsQuery } from '../../../redux/slices/api/groupsApi';
 import SidebarItemMenu from './SidebarItemMenu';
 import SidebarItemGroup from './SidebarItemGroup';
+import { useLogoutMutation } from '../../../redux/slices/api/authApi';
 
 const items = [
   {
@@ -41,9 +42,24 @@ const items = [
 const UserSidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
+  const [ logout, { 
+        isLoading: logoutIsLoading, 
+        isError: logoutIsError, 
+        error: logoutError, 
+        isSuccess 
+      }] = useLogoutMutation();
 
   const toggleMenuOpen = () => {
     setMenuOpen(!menuOpen);
+  }
+
+  const handleLogout = async () => {
+    try {
+      const result = await logout();
+    }
+    catch (err) {
+      console.error('Error:', err);
+    }
   }
 
   return (
@@ -86,7 +102,7 @@ const UserSidebar = () => {
               <Link to='/user/profile' className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 w-full text-sm">
                 <User size={16} /> Profile
               </Link>
-              <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 w-full text-sm">
+              <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 w-full text-sm">
                 <LogOut size={16} /> Logout
               </button>
             </div>

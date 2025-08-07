@@ -15,8 +15,20 @@ export const authApi = apiSlice.injectEndpoints({
         return response;
       },
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: 'auth/logout',
+        method: 'DELETE'
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response;
+      },
+    })
     // MORE ENDPOINTS
   })
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation } = authApi;

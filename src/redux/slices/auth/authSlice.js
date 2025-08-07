@@ -21,6 +21,12 @@ const authSlice = createSlice({
           state.isAuthenticated = true;
         }
       )
+      .addMatcher(
+        authApi.endpoints.logout.matchFulfilled, (state, action) => {
+          state.token = null,
+          state.isAuthenticated = false
+        }
+      )
   },
 });
 
