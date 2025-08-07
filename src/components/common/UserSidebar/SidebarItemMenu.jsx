@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-const SidebarItem = ({ item }) => {
+const SidebarItemMenu = ({ item }) => {
   return (
     <Link to={item.path}>
       <li className="hover:text-primary-400 cursor-pointer flex items-center gap-2">
@@ -11,4 +11,4 @@ const SidebarItem = ({ item }) => {
   )
 }
 
-export default SidebarItem;
+export default SidebarItemMenu;

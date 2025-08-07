@@ -1,38 +1,46 @@
 import React, { Fragment, useState } from 'react';
 import { Activity, ChartLine, ChevronDown, ChevronUp, LayoutDashboard, LogOut, Logs, User, UsersRound } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
-import SidebarItem from './SidebarItem';
+import { useGetUserGroupsQuery } from '../../../redux/slices/api/groupsApi';
+import SidebarItemMenu from './SidebarItemMenu';
+import SidebarItemGroup from './SidebarItemGroup';
 
 const items = [
   {
+    key: 1,
     title: 'Dashboard',
     path: '/user/dashboard',
     icon: LayoutDashboard
   },
   {
+    key: 2,
     title: 'All expenses',
     path: '/user/all',
     icon: Logs
   },
   {
+    key: 3,
     title: 'Groups',
     path: '/user/groups',
     icon: UsersRound
   },
   {
+    key: 4,
     title: 'Activity',
     path: '/user/activity',
     icon: Activity
   },
   {
+    key: 5,
     title: 'Reports',
     path: '/user/reports',
     icon: ChartLine
   },
-]
+];
 
 const UserSidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
 
   const toggleMenuOpen = () => {
     setMenuOpen(!menuOpen);
@@ -44,14 +52,22 @@ const UserSidebar = () => {
         <label> Split n Share</label>
         <div className="p-6">
           <ul className="space-y-4">
-            {items.map((item) => <SidebarItem item={item} />)}
+            {items.map((item) => <SidebarItemMenu keyey={item.key} item={item} />)}
           </ul>
 
           <div className="my-6 border-t border-gray-700" />
 
           <label> Your Groups </label>
           <ul className="space-y-4">
-            {items.map((item) => <SidebarItem item={item} />)}
+            {isLoading ? (
+              <li className="text-sm text-gray-400">Loading...</li>
+            ) : isError ? (
+              <li className="text-sm text-red-500">Failed to load</li>
+            ) : groups?.groups?.length > 0 ? (
+              groups?.groups?.map((group) => <SidebarItemGroup key={group.group} group={group} />)
+            ) : (
+              <li className="text-sm text-red-500">You are yet to join a group</li>
+            )}
           </ul>
         </div>
 
