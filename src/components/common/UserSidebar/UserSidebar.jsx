@@ -5,6 +5,7 @@ import { useGetUserGroupsQuery } from '../../../redux/slices/api/groupsApi';
 import SidebarItemMenu from './SidebarItemMenu';
 import SidebarItemGroup from './SidebarItemGroup';
 import { useLogoutMutation } from '../../../redux/slices/api/authApi';
+import toast from 'react-hot-toast';
 
 const items = [
   {
@@ -55,10 +56,15 @@ const UserSidebar = () => {
 
   const handleLogout = async () => {
     try {
-      const result = await logout();
+      const result = await logout().unwrap();
+
+      if (result.success) {
+        toast.success('Logged out successfully!')
+      }
     }
     catch (err) {
       console.error('Error:', err);
+      toast.error("Logout failed");
     }
   }
 

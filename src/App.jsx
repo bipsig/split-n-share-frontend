@@ -15,13 +15,14 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import SideBar from './components/common/SideBar'
 import PublicRoute from './routes/PublicRoute'
 import UserSidebar from './components/common/UserSidebar/UserSidebar'
+import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: '/',
       element: <SideBar />,
-      children:[
+      children: [
         {
           index: true,
           element: <LandingPage />
@@ -53,7 +54,7 @@ const App = () => {
             },
             {
               path: 'profile',
-              element: <UserProfile/>
+              element: <UserProfile />
             },
             {
               path: 'all',
@@ -64,7 +65,7 @@ const App = () => {
               children: [
                 {
                   index: true,
-                  element: <Groups/>
+                  element: <Groups />
                 },
                 {
                   path: ':id',
@@ -87,7 +88,10 @@ const App = () => {
   ])
 
   return (
-    <RouterProvider router={router}/>
+    <>
+      <RouterProvider router={router} />
+      <Toaster position='top-right' toastOptions={{duration: 3000 }} />
+    </>
   )
 }
 

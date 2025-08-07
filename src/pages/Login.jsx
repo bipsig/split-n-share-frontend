@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // import { loginUser } from '../redux/slices/auth/authThunks';
 // import useAuth from '../hooks/useAuth';
 import { useLoginMutation } from '../redux/slices/api/authApi';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,13 +25,14 @@ const Login = () => {
     try {
       const result = await login(credentials).unwrap();
 
-      console.log(result);
       if (result.success) {
         navigate('/user/dashboard')
+        toast.success('Logged in successfully!');
       }
     } 
     catch (err) {
       console.error('Error:', err);
+      toast.error('Unable to login');
     }
   }
 
