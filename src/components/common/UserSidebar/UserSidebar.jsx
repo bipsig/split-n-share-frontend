@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import {
   Activity, ChartLine, ChevronDown, ChevronUp, LayoutDashboard,
-  LogOut, Logs, User, UsersRound
+  LogOut, Logs, Menu, User, UsersRound, X
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useGetUserGroupsQuery } from '../../../redux/slices/api/groupsApi';
 import { useLogoutMutation } from '../../../redux/slices/api/authApi';
 import SidebarItemMenu from './SidebarItemMenu';
@@ -21,10 +20,12 @@ const items = [
 
 const UserSidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
   const [logout] = useLogoutMutation();
 
   const toggleMenuOpen = () => setMenuOpen(!menuOpen);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handleLogout = async () => {
     try {
@@ -38,9 +39,61 @@ const UserSidebar = () => {
   return (
     <div className="flex h-screen w-screen overflow-hidden">
 
-      <aside className="w-[250px] bg-gray-900 text-white flex flex-col justify-between overflow-y-auto">
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-30 px-4 py-3 flex items-center justify-between">
+        <h1 className="text-lg font-bold text-gray-900">Split n Share</h1>
+        <button
+          onClick={toggleSidebar}
+          className="p-2 rounded-md text-gray-600 hover:bg-gray-100"
+        >
+          {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Overlay with blur */}
+      <div
+        className={`
+          lg:hidden fixed inset-0 z-40 
+          transition-opacity duration-300 
+          ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} 
+          bg-white/30 backdrop-blur-sm
+        `}
+        onClick={toggleSidebar}
+      />
+
+      {/* Sidebar */}
+      <aside className={`
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+        lg:translate-x-0 
+        fixed lg:relative 
+        w-[280px] lg:w-[250px] 
+        h-full 
+        bg-gray-900 
+        text-white 
+        flex flex-col 
+        justify-between 
+        overflow-y-auto 
+        transition-transform 
+        duration-300 
+        ease-in-out 
+        z-50
+        lg:z-auto
+      `}>
         <div className="p-6">
-          <h1 className="text-xl font-bold mb-4">Split n Share</h1>
+          {/* Desktop Logo */}
+          <h1 className="hidden lg:block text-xl font-bold mb-4">Split n Share</h1>
+
+          {/* Mobile Logo */}
+          <div className="lg:hidden flex items-center justify-between mb-4">
+            <h1 className="text-xl font-bold">Split n Share</h1>
+            <button
+              onClick={toggleSidebar}
+              className="p-1 rounded-md text-gray-300 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
           <ul className="space-y-4">
             {items.map((item) => (
               <SidebarItemMenu key={item.key} item={item} />
@@ -87,9 +140,9 @@ const UserSidebar = () => {
         </div>
       </aside>
 
-
-      <main className="flex-1 h-screen overflow-y-auto bg-gray-100">
-        <div className="p-6">
+      {/* Main Content */}
+      <main className="flex-1 h-screen overflow-y-auto bg-gray-100 pt-16 lg:pt-0">
+        <div className="p-4 lg:p-6">
           <Outlet />
         </div>
       </main>

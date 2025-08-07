@@ -32,7 +32,7 @@ const Login = () => {
     } 
     catch (err) {
       console.error('Error:', err);
-      toast.error('Unable to login');
+      toast.error(`Unable to login: ${err.data.message}`);
     }
   }
 
