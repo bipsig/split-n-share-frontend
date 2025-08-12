@@ -9,6 +9,8 @@ import { useLogoutMutation } from '../../../redux/slices/api/authApi';
 import SidebarItemMenu from './SidebarItemMenu';
 import SidebarItemGroup from './SidebarItemGroup';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { apiSlice } from '../../../redux/slices/api/apiSlice';
 
 const items = [
   { key: 1, title: 'Dashboard', path: '/user/dashboard', icon: LayoutDashboard },
@@ -24,14 +26,20 @@ const UserSidebar = () => {
   const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
   const [logout] = useLogoutMutation();
 
+  const dispatch = useDispatch();
+
   const toggleMenuOpen = () => setMenuOpen(!menuOpen);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const handleLogout = async () => {
     try {
       const result = await logout().unwrap();
-      if (result.success) toast.success('Logged out successfully!');
+      if (result.success){
+        toast.success('Logged out successfully!');
+        dispatch(apiSlice.util.resetApiState());
+      } 
     } catch (err) {
+      console.error (err.message);
       toast.error("Logout failed");
     }
   };
