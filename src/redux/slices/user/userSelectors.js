@@ -1,0 +1,1 @@
+export const currentUsername = (state) => state.user.userData.username;

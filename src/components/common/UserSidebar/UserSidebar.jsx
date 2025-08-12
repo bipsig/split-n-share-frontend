@@ -11,6 +11,8 @@ import SidebarItemGroup from './SidebarItemGroup';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { apiSlice } from '../../../redux/slices/api/apiSlice';
+import { useGetUserDetailsQuery } from '../../../redux/slices/api/usersApi';
+import useUser from '../../../hooks/useUser';
 
 const items = [
   { key: 1, title: 'Dashboard', path: '/user/dashboard', icon: LayoutDashboard },
@@ -24,7 +26,10 @@ const UserSidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
+  const { data: userInfo, isLoading: isUserLoading } = useGetUserDetailsQuery();
   const [logout] = useLogoutMutation();
+
+  const { username } = useUser();
 
   const dispatch = useDispatch();
 
@@ -131,7 +136,7 @@ const UserSidebar = () => {
             className="flex items-center gap-3 w-full hover:bg-gray-800 px-3 py-2 rounded-md"
           >
             <User className="w-6 h-6 text-gray-300" />
-            <div className="flex-1 text-left text-sm font-medium">Username</div>
+            <div className="flex-1 text-left text-sm font-medium">{username}</div>
             {menuOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
           </button>
 
