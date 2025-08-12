@@ -1,11 +1,14 @@
 import React from 'react'
 import Tile from '../components/common/CardTiles/Tile'
 import { HandCoins, Home, Loader2, Users } from 'lucide-react'
-import { useGetFinancialSummaryQuery, useGetGroupsSummaryQuery } from '../redux/slices/api/usersApi';
+import { useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery } from '../redux/slices/api/usersApi';
+import { parseTime } from '../utils/parseTime';
+import { parseGroupMembers } from '../utils/parseGroupMembers';
 
 const Dashboard = () => {
   const { data: financialData, isLoading: isFinancialLoading, isError: isFinancialError } = useGetFinancialSummaryQuery();
   const { data: groupsData, isLoading: isGroupsLoading, isError: isGroupsError } = useGetGroupsSummaryQuery();
+  const { data: recentTransactions, isLoading: isTransactionsLoading, isError: isTransactionsError } = useGetRecentTransactionsQuery();
   return (
     <div className="w-full h-full space-y-4 lg:space-y-6 bg-gray-50">
 
@@ -118,41 +121,35 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="space-y-1">
-          <Tile
-            icon={<Home size={18} className="text-gray-600" />}
-            heading="Apartment Rent"
-            subheading="with Sarah, Mike, James"
-            amount="+₹150.25"
-            note="you are owed"
-          />
-          <Tile
-            icon={<Home size={18} className="text-gray-600" />}
-            heading="Grocery Shopping"
-            subheading="with Mike, James"
-            amount="-₹85.50"
-            note="you owe"
-          />
-          <Tile
-            icon={<Home size={18} className="text-gray-600" />}
-            heading="Movie Night"
-            subheading="with Sarah, Alex"
-            amount="+₹120.00"
-            note="you are owed"
-          />
-          <Tile
-            icon={<Home size={18} className="text-gray-600" />}
-            heading="Dinner Out"
-            subheading="with Friends"
-            amount="-₹75.25"
-            note="you owe"
-          />
-          <Tile
-            icon={<Home size={18} className="text-gray-600" />}
-            heading="Utilities"
-            subheading="with Roommates"
-            amount="+₹200.00"
-            note="you are owed"
-          />
+          {isTransactionsLoading ? (
+            <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
+          ) : (
+            <>
+              {recentTransactions.count === 0 ? (
+                <div className="flex flex-col items-center justify-center text-center p-6 border border-gray-100 rounded-lg bg-gray-50">
+                  <div className="bg-blue-100 text-blue-600 w-12 h-12 flex items-center justify-center rounded-full mb-3">
+                    <Home size={22} />
+                  </div>
+                  <h4 className="text-gray-800 font-medium text-sm">No recent transactions</h4>
+                  <p className="text-gray-500 text-xs mt-1">Your latest expenses and settlements will appear here.</p>
+                </div>
+              ) : (
+                <>
+                  {recentTransactions.data.map((transaction) => {
+                    const time = parseTime(transaction.creationTime);
+                    return (
+                      <Tile
+                        icon={<Home size={18} className="text-gray-600" />}
+                        heading={`${transaction.title} in ${transaction.groupName.name}`}
+                        subheading={`${transaction.userPaid} paid ₹${transaction.amount}`}
+                        amount={time}
+                      />
+                    )
+                  })}
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
 
@@ -179,24 +176,7 @@ const Dashboard = () => {
                 ) : (
                   <>
                     {groupsData.data.map((group) => {
-                      let subheading = "with "
-                      const members = group.members.length;
-
-                      let i = 0;
-                      for (; i < members - 1 && i <= 1; i++) {
-                        subheading = subheading.concat (`${group.members[i].username}, `);
-                      }
-
-                      subheading = subheading.concat (`${group.members[i].username} `);
-                      i++;
-
-                      const diff = members - i;
-                      if (diff > 1) {
-                        subheading = subheading.concat (`and ${diff} others`)
-                      }
-                      else if (diff === 1) {
-                        subheading = subheading.concat (`and ${diff} other`)
-                      }
+                      const subheading = parseGroupMembers(group.members);
                       return (
                         <Tile
                           icon={<Home size={18} className="text-gray-600" />}

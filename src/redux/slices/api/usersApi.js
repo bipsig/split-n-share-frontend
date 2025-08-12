@@ -34,8 +34,19 @@ export const usersApi = apiSlice.injectEndpoints({
         }
         return response.data;
       }
+    }),
+    getRecentTransactions: builder.query({
+      query: () => ({
+        url: 'users/recent-transactions'
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response.data;
+      }
     })
   })
 })
 
-export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery } = usersApi;
+export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery } = usersApi;
