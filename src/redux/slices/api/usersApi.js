@@ -21,11 +21,21 @@ export const usersApi = apiSlice.injectEndpoints({
         if (!response.success) {
           throw new Error(response.message);
         }
-        
+        return response.data;
+      }
+    }),
+    getGroupsSummary: builder.query({
+      query: () => ({
+        url: 'users/groups-summary'
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
         return response.data;
       }
     })
   })
 })
 
-export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery } = usersApi;
+export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery } = usersApi;
