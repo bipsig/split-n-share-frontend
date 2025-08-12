@@ -12,8 +12,20 @@ export const usersApi = apiSlice.injectEndpoints({
         }
         return response.data;
       }
+    }),
+    getFinancialSummary: builder.query({
+      query: () => ({
+        url: 'users/financial-summary'
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        
+        return response.data;
+      }
     })
   })
 })
 
-export const { useGetUserDetailsQuery } = usersApi;
+export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery } = usersApi;

@@ -1,8 +1,10 @@
 import React from 'react'
 import Tile from '../components/common/CardTiles/Tile'
-import { Home } from 'lucide-react'
+import { HandCoins, Home, Loader2 } from 'lucide-react'
+import { useGetFinancialSummaryQuery } from '../redux/slices/api/usersApi';
 
 const Dashboard = () => {
+  const { data, isLoading, isError } = useGetFinancialSummaryQuery();
   return (
     <div className="w-full h-full space-y-4 lg:space-y-6 bg-gray-50">
 
@@ -13,91 +15,94 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Total Balance - Fixed size */}
         <div className="bg-white shadow-sm rounded-lg p-4 lg:p-6 text-center order-1">
-          <h3 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-            Total Balance
-          </h3>
-          <p className="text-2xl lg:text-3xl font-bold text-gray-800 mb-1">₹245.50</p>
-          <p className="text-xs lg:text-sm text-gray-600">
-            You are owed <span className="font-medium text-green-600">₹320.75</span> and you owe <span className="font-medium text-red-600">₹75.25</span>
-          </p>
+          {isLoading ? (
+            <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
+          ) : (
+            <>
+              <h3 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Total Balance
+              </h3>
+              <p className="text-2xl lg:text-3xl font-bold text-gray-800 mb-1">₹{data.balance}</p>
+              <p className="text-xs lg:text-sm text-gray-600">
+                You are owed <span className="font-medium text-green-600">₹{data.youGetBack}</span> and you owe <span className="font-medium text-red-600">₹{data.youPay}</span>
+              </p>
+            </>
+          )}
         </div>
 
         {/* You Owe - Dynamic with max height and scroll */}
         <div className="bg-white shadow-sm rounded-lg p-4 flex flex-col order-2">
-          <h3 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            You Owe
-          </h3>
-          <div className="flex-1 min-h-0 max-h-60 lg:max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            <div className="space-y-1">
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Apartment"
-                subheading="with Sarah, Mike, James"
-                amount="-₹75.25"
-                note="you owe"
-              />
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Groceries"
-                subheading="with Mike"
-                amount="-₹25.00"
-                note="you owe"
-              />
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Utilities"
-                subheading="with Sarah, James"
-                amount="-₹150.50"
-                note="you owe"
-              />
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Internet"
-                subheading="with Roommates"
-                amount="-₹50.00"
-                note="you owe"
-              />
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Dinner"
-                subheading="with Friends"
-                amount="-₹80.75"
-                note="you owe"
-              />
-            </div>
-          </div>
+          {isLoading ? (
+            <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
+          ) : (
+            <>
+              <h3 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                You Owe
+              </h3>
+              <div className="flex-1 min-h-0 max-h-60 lg:max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                <div className="space-y-1">
+                  {data?.peopleYouOwe.count == 0 ? (
+                    <div className="flex flex-col items-center justify-center h-40 text-gray-500">
+                      <div className="p-3 bg-gray-100 rounded-full mb-2">
+                        <Home size={20} className="text-gray-400" />
+                      </div>
+                      <p className="text-sm font-medium">All Clear! 🎉</p>
+                      <p className="text-xs text-gray-400">You don’t owe anyone right now</p>
+                    </div>
+                  ) : (
+                    <>
+                      {data?.peopleYouOwe.data.map((element) => {
+                        return (
+                          <Tile
+                            icon={<Home size={18} className="text-gray-600" />}
+                            heading={element.username}
+                            subheading={`You owe ₹${element.amount}`}
+                          />
+                        )
+                      })}
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* You Are Owed - Dynamic with max height and scroll */}
-        <div className="bg-white shadow-sm rounded-lg p-4 flex flex-col order-3">
-          <h3 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            You Are Owed
-          </h3>
-          <div className="flex-1 min-h-0 max-h-60 lg:max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            <div className="space-y-1">
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Apartment"
-                subheading="with Sarah, Mike, James"
-                amount="+₹150.25"
-                note="you are owed"
-              />
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Movie Tickets"
-                subheading="with Alex, John"
-                amount="+₹170.50"
-                note="you are owed"
-              />
-              <Tile
-                icon={<Home size={18} className="text-gray-600" />}
-                heading="Lunch"
-                subheading="with Sarah"
-                amount="+₹45.00"
-                note="you are owed"
-              />
-            </div>
-          </div>
+        <div className="bg-white shadow-sm rounded-lg p-4 flex flex-col order-2">
+          {isLoading ? (
+            <Loader2 className="w-10 h-10 text-primary-500 animate-spin" />
+          ) : (
+            <>
+              <h3 className="text-xs lg:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                You are owed
+              </h3>
+              <div className="flex-1 min-h-0 max-h-60 lg:max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                <div className="space-y-1">
+                  {data?.peopleWhoOweYou.count == 0 ? (
+                    <div className="flex flex-col items-center justify-center h-40 text-gray-500">
+                      <div className="p-3 bg-green-100 rounded-full mb-2">
+                        <HandCoins size={20} className="text-green-500" />
+                      </div>
+                      <p className="text-sm font-medium">No pending payments 💸</p>
+                      <p className="text-xs text-gray-400">Everyone’s all settled up</p>
+                    </div>
+                  ) : (
+                    <>
+                      {data?.peopleWhoOweYou.data.map((element) => {
+                        return (
+                          <Tile
+                            icon={<Home size={18} className="text-gray-600" />}
+                            heading={element.username}
+                            subheading={`Owes you ₹${element.amount}`}
+                          />
+                        )
+                      })}
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
