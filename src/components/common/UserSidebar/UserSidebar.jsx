@@ -1,6 +1,6 @@
 import SidebarItemMenu from './SidebarItemMenu';
 import SidebarItemGroup from './SidebarItemGroup';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   Activity, 
   BarChart3, 
@@ -44,6 +44,8 @@ const UserSidebar = () => {
   
   const { username } = useUser();
   const dispatch = useDispatch();
+
+  const location = useLocation();
 
   const toggleMenuOpen = () => setMenuOpen(!menuOpen);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -154,7 +156,7 @@ const UserSidebar = () => {
                   <SidebarItemMenu 
                     key={item.key} 
                     item={item} 
-                    isActive={activeItem === item.title}
+                    isActive={item.path === location.pathname}
                   />
                 ))}
               </ul>
@@ -179,7 +181,7 @@ const UserSidebar = () => {
                     <SidebarItemGroup 
                       key={group.group} 
                       group={group} 
-                      isActive={false} // You can add logic for active group
+                      isActive={`/user/groups/${group.groupId}` === location.pathname} // You can add logic for active group
                     />
                   ))
                 ) : (
