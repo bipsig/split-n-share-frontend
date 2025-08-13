@@ -1,36 +1,48 @@
-import React, { useState } from 'react';
+import SidebarItemMenu from './SidebarItemMenu';
+import SidebarItemGroup from './SidebarItemGroup';
 import { Outlet, Link } from 'react-router-dom';
-import {
-  Activity, ChartLine, ChevronDown, ChevronUp, LayoutDashboard,
-  LogOut, Logs, Menu, User, UsersRound, X
+import { 
+  Activity, 
+  BarChart3, 
+  ChevronDown, 
+  ChevronUp, 
+  LayoutDashboard,
+  LogOut, 
+  FileText, 
+  Menu, 
+  User, 
+  Users, 
+  X,
 } from 'lucide-react';
 import { useGetUserGroupsQuery } from '../../../redux/slices/api/groupsApi';
 import { useLogoutMutation } from '../../../redux/slices/api/authApi';
-import SidebarItemMenu from './SidebarItemMenu';
-import SidebarItemGroup from './SidebarItemGroup';
+import { useGetUserDetailsQuery } from '../../../redux/slices/api/usersApi';
+import useUser from '../../../hooks/useUser';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { apiSlice } from '../../../redux/slices/api/apiSlice';
-import { useGetUserDetailsQuery } from '../../../redux/slices/api/usersApi';
-import useUser from '../../../hooks/useUser';
+import { useState } from 'react';
 
 const items = [
   { key: 1, title: 'Dashboard', path: '/user/dashboard', icon: LayoutDashboard },
-  { key: 2, title: 'All expenses', path: '/user/all', icon: Logs },
-  { key: 3, title: 'Groups', path: '/user/groups', icon: UsersRound },
+  { key: 2, title: 'All expenses', path: '/user/all', icon: FileText },
+  { key: 3, title: 'Groups', path: '/user/groups', icon: Users },
   { key: 4, title: 'Activity', path: '/user/activity', icon: Activity },
-  { key: 5, title: 'Reports', path: '/user/reports', icon: ChartLine },
+  { key: 5, title: 'Reports', path: '/user/reports', icon: BarChart3 },
 ];
+
 
 const UserSidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState('Dashboard'); // Demo active state
+
+  // API hooks
   const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
   const { data: userInfo, isLoading: isUserLoading } = useGetUserDetailsQuery();
   const [logout] = useLogoutMutation();
-
+  
   const { username } = useUser();
-
   const dispatch = useDispatch();
 
   const toggleMenuOpen = () => setMenuOpen(!menuOpen);
@@ -39,37 +51,42 @@ const UserSidebar = () => {
   const handleLogout = async () => {
     try {
       const result = await logout().unwrap();
-      if (result.success){
+      if (result.success) {
         toast.success('Logged out successfully!');
         dispatch(apiSlice.util.resetApiState());
       } 
     } catch (err) {
-      console.error (err.message);
+      console.error(err.message);
       toast.error("Logout failed");
     }
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
-
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+      
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 bg-white shadow-sm z-30 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-lg font-bold text-gray-900">Split n Share</h1>
+      <div className="lg:hidden fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-sm z-30 px-4 py-3 flex items-center justify-between border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">S</span>
+          </div>
+          <h1 className="text-lg font-bold text-gray-900">Split n Share</h1>
+        </div>
         <button
           onClick={toggleSidebar}
-          className="p-2 rounded-md text-gray-600 hover:bg-gray-100"
+          className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors duration-200"
         >
-          {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
-      {/* Mobile Overlay with blur */}
+      {/* Mobile Overlay */}
       <div
         className={`
           lg:hidden fixed inset-0 z-40 
-          transition-opacity duration-300 
+          transition-all duration-300 
           ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} 
-          bg-white/30 backdrop-blur-sm
+          bg-black/20 backdrop-blur-sm
         `}
         onClick={toggleSidebar}
       />
@@ -79,86 +96,198 @@ const UserSidebar = () => {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
         lg:translate-x-0 
         fixed lg:relative 
-        w-[280px] lg:w-[250px] 
+        w-[280px] lg:w-[280px] 
         h-full 
-        bg-gray-900 
+        bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800
         text-white 
         flex flex-col 
         justify-between 
-        overflow-y-auto 
-        transition-transform 
+        overflow-hidden
+        transition-all 
         duration-300 
         ease-in-out 
         z-50
         lg:z-auto
+        border-r border-gray-800
+        shadow-2xl lg:shadow-none
       `}>
-        <div className="p-6">
-          {/* Desktop Logo */}
-          <h1 className="hidden lg:block text-xl font-bold mb-4">Split n Share</h1>
+        
+        {/* Sidebar Content */}
+        <div className="flex flex-col h-full">
+          
+          {/* Header */}
+          <div className="p-6 pb-4">
+            {/* Desktop Logo */}
+            <div className="hidden lg:flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold">S</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white">Split n Share</h1>
+                <p className="text-xs text-gray-400">Expense Management</p>
+              </div>
+            </div>
 
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center justify-between mb-4">
-            <h1 className="text-xl font-bold">Split n Share</h1>
-            <button
-              onClick={toggleSidebar}
-              className="p-1 rounded-md text-gray-300 hover:text-white"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          <ul className="space-y-4">
-            {items.map((item) => (
-              <SidebarItemMenu key={item.key} item={item} />
-            ))}
-          </ul>
-
-          <div className="my-6 border-t border-gray-700" />
-          <label className="text-sm text-gray-400">Your Groups</label>
-          <ul className="space-y-2 mt-2">
-            {isLoading ? (
-              <li className="text-sm text-gray-400">Loading...</li>
-            ) : isError ? (
-              <li className="text-sm text-red-500">Failed to load</li>
-            ) : groups?.groups?.length > 0 ? (
-              groups.groups.map((group) => (
-                <SidebarItemGroup key={group.group} group={group} />
-              ))
-            ) : (
-              <li className="text-sm text-red-500">You are yet to join a group</li>
-            )}
-          </ul>
-        </div>
-
-        <div className="p-4 border-t border-gray-700 relative">
-          <button
-            onClick={toggleMenuOpen}
-            className="flex items-center gap-3 w-full hover:bg-gray-800 px-3 py-2 rounded-md"
-          >
-            <User className="w-6 h-6 text-gray-300" />
-            <div className="flex-1 text-left text-sm font-medium">{username}</div>
-            {menuOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-          </button>
-
-          {menuOpen && (
-            <div className="absolute bottom-16 left-4 bg-gray-800 rounded-md shadow-lg w-48 py-2 z-50">
-              <Link to='/user/profile' className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 w-full text-sm">
-                <User size={16} /> Profile
-              </Link>
-              <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 hover:bg-gray-700 w-full text-sm">
-                <LogOut size={16} /> Logout
+            {/* Mobile Header */}
+            <div className="lg:hidden flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">S</span>
+                </div>
+                <h1 className="text-lg font-bold">Split n Share</h1>
+              </div>
+              <button
+                onClick={toggleSidebar}
+                className="p-1 rounded-lg text-gray-400 hover:text-white transition-colors duration-200"
+              >
+                <X className="w-5 h-5" />
               </button>
             </div>
-          )}
+
+            {/* Navigation Menu */}
+            <div className="space-y-1">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-3">
+                Navigation
+              </div>
+              <ul className="space-y-1 list-none">
+                {items.map((item) => (
+                  <SidebarItemMenu 
+                    key={item.key} 
+                    item={item} 
+                    isActive={activeItem === item.title}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Groups Section */}
+          <div className="px-6 flex-1 overflow-y-auto">
+            <div className="border-t border-gray-700/50 pt-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Your Groups
+                </span>
+                <div className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
+                  {groups?.groups?.length}
+                </div>
+              </div>
+              
+              <ul className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar list-none">
+                {groups?.groups?.length > 0 ? (
+                  groups.groups.map((group) => (
+                    <SidebarItemGroup 
+                      key={group.group} 
+                      group={group} 
+                      isActive={false} // You can add logic for active group
+                    />
+                  ))
+                ) : (
+                  <li className="text-sm text-gray-500 italic px-3 py-4 text-center list-none">
+                    No groups yet
+                    <br />
+                    <span className="text-xs text-gray-600">Create your first group to get started</span>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+
+          {/* User Profile Section */}
+          <div className="p-4 border-t border-gray-700/50 bg-gray-900/50">
+            <div className="relative">
+              <button
+                onClick={toggleMenuOpen}
+                className="flex items-center gap-3 w-full hover:bg-gray-800/50 px-3 py-3 rounded-xl transition-all duration-200 group"
+              >
+                {/* User Avatar Placeholder */}
+                <div className="w-9 h-9 bg-gradient-to-br from-gray-600 to-gray-700 rounded-xl flex items-center justify-center border-2 border-gray-600 group-hover:border-gray-500 transition-colors duration-200">
+                  <User className="w-5 h-5 text-gray-300" />
+                </div>
+                
+                <div className="flex-1 text-left min-w-0">
+                  <div className="text-sm font-medium text-white truncate">{username || 'Loading...'}</div>
+                  <div className="text-xs text-gray-400">Premium Plan</div>
+                </div>
+                
+                <div className="transition-transform duration-200">
+                  {menuOpen ? 
+                    <ChevronUp className="w-4 h-4 text-gray-400" /> : 
+                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                  }
+                </div>
+              </button>
+
+              {/* Dropdown Menu */}
+              {menuOpen && (
+                <div className="absolute bottom-full left-0 right-0 mb-2 bg-gray-800 rounded-xl shadow-xl border border-gray-700 py-2 z-50 animate-in slide-in-from-bottom-2 duration-200">
+                  <Link 
+                    to='/user/profile' 
+                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-700 text-sm text-gray-200 hover:text-white transition-colors duration-200"
+                  >
+                    <User size={16} className="text-gray-400" />
+                    <span>View Profile</span>
+                  </Link>
+                  <hr className="border-gray-700 my-1" />
+                  <button 
+                    onClick={handleLogout} 
+                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-500/10 hover:text-red-400 text-sm text-gray-200 w-full transition-colors duration-200"
+                  >
+                    <LogOut size={16} className="text-gray-400" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 h-screen overflow-y-auto bg-gray-100 pt-16 lg:pt-0">
+      {/* Main Content - Outlet for child routes */}
+      <main className="flex-1 h-screen overflow-y-auto bg-gray-50 pt-16 lg:pt-0">
         <div className="p-4 lg:p-6">
           <Outlet />
         </div>
       </main>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(156, 163, 175, 0.3);
+          border-radius: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(156, 163, 175, 0.5);
+        }
+        
+        @keyframes slide-in-from-bottom-2 {
+          from {
+            transform: translateY(8px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-in {
+          animation-fill-mode: both;
+        }
+        
+        .slide-in-from-bottom-2 {
+          animation-name: slide-in-from-bottom-2;
+        }
+        
+        .duration-200 {
+          animation-duration: 200ms;
+        }
+      `}</style>
     </div>
   );
 };
