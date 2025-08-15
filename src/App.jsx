@@ -9,13 +9,13 @@ import UserProfile from './pages/UserProfile'
 import Expenses from './pages/Expenses'
 import Groups from './pages/Groups'
 import GroupPage from './pages/GroupPage'
-import Activity from './pages/Activity'
 import Reports from './pages/Reports'
 import ProtectedRoute from './routes/ProtectedRoute'
 import SideBar from './components/common/SideBar'
 import PublicRoute from './routes/PublicRoute'
 import UserSidebar from './components/common/UserSidebar/UserSidebar'
 import { Toaster } from 'react-hot-toast'
+import ActivityPage from './pages/Activity'
 
 const App = () => {
   const router = createBrowserRouter([
@@ -75,7 +75,7 @@ const App = () => {
             },
             {
               path: 'activity',
-              element: <Activity />
+              element: <ActivityPage />
             },
             {
               path: 'reports',
