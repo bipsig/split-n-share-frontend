@@ -21,6 +21,12 @@ const userSlice = createSlice({
                     state.userData = action.payload.user;
                 }
             )
+            .addMatcher(
+                usersApi.endpoints.updateUserDetails.matchFulfilled, (state, action) => {
+                    const { user } = action.payload
+                    state.userData = user
+                }
+            )
     }
 });
 

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  User, 
-  Settings, 
-  Edit3, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Briefcase, 
-  Calendar, 
-  Shield, 
-  Lock, 
-  Bell, 
+import {
+  User,
+  Settings,
+  Edit3,
+  Mail,
+  Phone,
+  MapPin,
+  Briefcase,
+  Calendar,
+  Shield,
+  Lock,
+  Bell,
   Trash2,
   Save,
   X,
@@ -27,40 +27,40 @@ import {
 } from 'lucide-react';
 import { parseAmount } from '../utils/themes/parseAmount';
 import { parseTime } from '../utils/parseTime';
+import { getInitials } from '../utils/getInitials';
+import useUser from '../hooks/useUser';
+import { useUpdateUserDetailsMutation } from '../redux/slices/api/usersApi';
+import toast from 'react-hot-toast';
 
 const UserProfile = () => {
+  const [updateUserDetails, { isLoading, isError, error, isSuccess, data }] = useUpdateUserDetailsMutation();
+
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Mock user data based on your user model
-  const [userData, setUserData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    username: 'johndoe123',
-    mobileNumber: '9876543210',
-    location: 'Mumbai, Maharashtra',
-    occupation: 'Software Engineer',
-    gender: 'Male',
-    picturePath: '',
+  const { user } = useUser();
+
+  const userData = user?.userData || {
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    mobileNumber: '',
+    location: '',
+    occupation: '',
+    gender: '',
+    picturePath: null,
     isActive: true,
-    totalBalance: 1250.75,
-    createdAt: '2024-01-15T10:30:00Z',
-    groups: [
-      { group: '1', groupSlug: 'family-house' },
-      { group: '2', groupSlug: 'goa-trip-2024' },
-      { group: '3', groupSlug: 'office-lunch-club' }
-    ],
-    transactions: [
-      { transaction: '1', transactionSlug: 'grocery-shopping' },
-      { transaction: '2', transactionSlug: 'electricity-bill' }
-    ]
-  });
+    totalBalance: 0,
+    createdAt: new Date().toISOString(),
+    groups: [],
+    transactions: []
+  };
 
   const [editData, setEditData] = useState(userData);
   const [passwordData, setPasswordData] = useState({
@@ -75,14 +75,27 @@ const UserProfile = () => {
   };
 
   const handleSave = async () => {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setUserData(editData);
-    setIsEditing(false);
-    setIsLoading(false);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    
+    const updatedFields = {
+      firstName: editData.firstName,
+      lastName: editData.lastName,
+      email: editData.email,
+      mobileNumber: editData.mobileNumber,
+      location: editData.location,
+      occupation: editData.occupation
+    };
+
+    try {
+      const result = await updateUserDetails(updatedFields).unwrap();
+      setIsEditing(false);
+
+      toast.success('Changes saved successfully!')
+    }
+    catch (err) {
+      console.error('Error:', err);
+      toast.error(`Unable to update user: ${err.data.message}`);
+    }
+    
   };
 
   const handleCancel = () => {
@@ -95,23 +108,19 @@ const UserProfile = () => {
       alert('Passwords do not match');
       return;
     }
-    setIsLoading(true);
+    // setIsLoading(true);
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsChangingPassword(false);
     setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    setIsLoading(false);
+    // setIsLoading(false);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
   };
 
-  const getInitials = (firstName, lastName) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
   return (
     <div className="w-full h-full space-y-6 bg-gradient-to-br from-gray-50 via-gray-100 to-slate-100 min-h-screen">
-      
+
       {/* Success Message */}
       {saveSuccess && (
         <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-pulse">
@@ -131,7 +140,7 @@ const UserProfile = () => {
 
         <div className="flex gap-3">
           {!isEditing ? (
-            <button 
+            <button
               onClick={handleEdit}
               className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
@@ -140,7 +149,7 @@ const UserProfile = () => {
             </button>
           ) : (
             <>
-              <button 
+              <button
                 onClick={handleSave}
                 disabled={isLoading}
                 className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50"
@@ -148,7 +157,7 @@ const UserProfile = () => {
                 {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                 <span className="hidden sm:inline">{isLoading ? 'Saving...' : 'Save'}</span>
               </button>
-              <button 
+              <button
                 onClick={handleCancel}
                 className="flex items-center gap-2 px-4 py-2.5 bg-white/80 backdrop-blur-md text-gray-700 rounded-xl font-medium hover:bg-white/90 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-gray-200/50"
               >
@@ -230,9 +239,9 @@ const UserProfile = () => {
             <div className="flex items-center gap-4 mb-6 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-100">
               <div className="relative">
                 {userData.picturePath ? (
-                  <img 
-                    src={userData.picturePath} 
-                    alt="Profile" 
+                  <img
+                    src={userData.picturePath}
+                    alt="Profile"
                     className="w-16 h-16 rounded-xl object-cover shadow-lg"
                   />
                 ) : (
@@ -242,11 +251,11 @@ const UserProfile = () => {
                     </span>
                   </div>
                 )}
-                {isEditing && (
+                {/* {isEditing && (
                   <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition-all duration-200 shadow-lg">
                     <Camera size={14} />
                   </button>
-                )}
+                )} */}
               </div>
               <div>
                 <h4 className="font-semibold text-gray-800">{userData.firstName} {userData.lastName}</h4>
@@ -268,7 +277,7 @@ const UserProfile = () => {
                     <input
                       type="text"
                       value={editData.firstName}
-                      onChange={(e) => setEditData({...editData, firstName: e.target.value})}
+                      onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
                       className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
                     />
                   ) : (
@@ -283,7 +292,7 @@ const UserProfile = () => {
                     <input
                       type="text"
                       value={editData.lastName}
-                      onChange={(e) => setEditData({...editData, lastName: e.target.value})}
+                      onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
                       className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
                     />
                   ) : (
@@ -294,32 +303,25 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              {/* Email and Username */}
+              {/* Username and gender */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                    <Mail size={16} />
-                    Email Address
+                    Username
                   </label>
                   <div className="px-4 py-3 bg-gray-50/80 rounded-xl border border-gray-200/50">
-                    <p className="text-gray-800">{userData.email}</p>
-                    <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                    <p className="text-gray-800">@{userData.username}</p>
+                    <p className="text-xs text-gray-500 mt-1">Username cannot be changed</p>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editData.username}
-                      onChange={(e) => setEditData({...editData, username: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
-                    />
-                  ) : (
-                    <div className="px-4 py-3 bg-gray-50/80 rounded-xl border border-gray-200/50">
-                      <p className="text-gray-800">@{userData.username}</p>
-                    </div>
-                  )}
+                  <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                    Gender
+                  </label>
+                  <div className="px-4 py-3 bg-gray-50/80 rounded-xl border border-gray-200/50">
+                    <p className="text-gray-800">{userData.gender}</p>
+                    <p className="text-xs text-gray-500 mt-1">Gender cannot be changed</p>
+                  </div>
                 </div>
               </div>
 
@@ -334,7 +336,7 @@ const UserProfile = () => {
                     <input
                       type="text"
                       value={editData.mobileNumber}
-                      onChange={(e) => setEditData({...editData, mobileNumber: e.target.value})}
+                      onChange={(e) => setEditData({ ...editData, mobileNumber: e.target.value })}
                       className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
                       placeholder="Enter mobile number"
                     />
@@ -345,19 +347,20 @@ const UserProfile = () => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                  <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                    <Mail size={16} />
+                    Email Address
+                  </label>
                   {isEditing ? (
-                    <select
-                      value={editData.gender}
-                      onChange={(e) => setEditData({...editData, gender: e.target.value})}
+                    <input
+                      type="email"
+                      value={editData.email}
+                      onChange={(e) => setEditData({ ...editData, email: e.target.value })}
                       className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
-                    >
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
+                    />
                   ) : (
                     <div className="px-4 py-3 bg-gray-50/80 rounded-xl border border-gray-200/50">
-                      <p className="text-gray-800">{userData.gender}</p>
+                      <p className="text-gray-800">{userData.email}</p>
                     </div>
                   )}
                 </div>
@@ -374,7 +377,7 @@ const UserProfile = () => {
                     <input
                       type="text"
                       value={editData.location}
-                      onChange={(e) => setEditData({...editData, location: e.target.value})}
+                      onChange={(e) => setEditData({ ...editData, location: e.target.value })}
                       className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
                       placeholder="Enter your location"
                     />
@@ -393,7 +396,7 @@ const UserProfile = () => {
                     <input
                       type="text"
                       value={editData.occupation}
-                      onChange={(e) => setEditData({...editData, occupation: e.target.value})}
+                      onChange={(e) => setEditData({ ...editData, occupation: e.target.value })}
                       className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200"
                       placeholder="Enter your occupation"
                     />
@@ -446,7 +449,7 @@ const UserProfile = () => {
                           <p className="text-sm text-gray-600">Last changed 30 days ago</p>
                         </div>
                       </div>
-                      <button 
+                      <button
                         onClick={() => setIsChangingPassword(true)}
                         className="px-4 py-2 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition-all duration-200"
                       >
@@ -478,7 +481,7 @@ const UserProfile = () => {
                       <input
                         type={showCurrentPassword ? "text" : "password"}
                         value={passwordData.currentPassword}
-                        onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                         className="w-full px-4 py-3 pr-12 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-200"
                         placeholder="Enter current password"
                       />
@@ -498,7 +501,7 @@ const UserProfile = () => {
                       <input
                         type={showNewPassword ? "text" : "password"}
                         value={passwordData.newPassword}
-                        onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                         className="w-full px-4 py-3 pr-12 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-200"
                         placeholder="Enter new password"
                       />
@@ -518,7 +521,7 @@ const UserProfile = () => {
                       <input
                         type={showConfirmPassword ? "text" : "password"}
                         value={passwordData.confirmPassword}
-                        onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                         className="w-full px-4 py-3 pr-12 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all duration-200"
                         placeholder="Confirm new password"
                       />

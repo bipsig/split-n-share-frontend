@@ -52,7 +52,7 @@ const Dashboard = () => {
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
                   Total Balance
                 </h3>
-                <p className="text-3xl lg:text-4xl font-bold text-gray-800 mb-3">{parseAmount(financialData.balance)}</p>
+                <p className={`text-3xl lg:text-4xl font-bold ${financialData.balance > 0 ? "text-green-600" : "text-red-600"} mb-3`}>{parseAmount(financialData.balance)}</p>
                 <div className="text-sm text-gray-600 bg-gray-50/80 rounded-lg p-3">
                   You get <span className="font-semibold text-green-600">{parseAmount(financialData.youGetBack)}</span> ·
                   You owe <span className="font-semibold text-red-600">{parseAmount(financialData.youPay)}</span>

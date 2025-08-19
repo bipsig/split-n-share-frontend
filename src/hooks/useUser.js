@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
-import { currentUsername } from "../redux/slices/user/userSelectors";
+import { currentUsername, userData } from "../redux/slices/user/userSelectors";
 
 const useUser = () => {
   const username = useSelector(currentUsername);
+  const user = useSelector(userData);
 
   return {
-    username
+    username,
+    user
   }
 }
 

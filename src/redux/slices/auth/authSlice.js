@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authApi } from "../api/authApi";
+import { usersApi } from "../api/usersApi";
 
 const initialState = {
   token: null,
@@ -24,6 +25,16 @@ const authSlice = createSlice({
         authApi.endpoints.logout.matchFulfilled, (state, action) => {
           state.token = null,
           state.isAuthenticated = false
+        }
+      )
+      .addMatcher(
+        usersApi.endpoints.updateUserDetails.matchFulfilled, (state, action) => {
+          const { accessToken } = action.payload;
+          
+          if (accessToken) {
+            state.token = accessToken;
+            state.isAuthenticated = true;
+          }
         }
       )
   },
