@@ -59,8 +59,22 @@ export const usersApi = apiSlice.injectEndpoints({
 
         return response.data
       }
+    }),
+    updateUserPassword: builder.mutation({
+      query: (body) => ({
+        url: 'users/me/password',
+        method: 'PATCH',
+        body: body
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+
+        return response.data;
+      }
     })
   })
 })
 
-export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery, useUpdateUserDetailsMutation } = usersApi;
+export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } = usersApi;

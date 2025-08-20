@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { parseAmount } from '../utils/themes/parseAmount';
 import useUser from '../hooks/useUser';
-import { useUpdateUserDetailsMutation } from '../redux/slices/api/usersApi';
+import { useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from '../redux/slices/api/usersApi';
 import toast from 'react-hot-toast';
 import HeaderWithSubtitle from '../components/common/PageHeader/HeaderWithSubtitle';
 import PageLayout from '../layouts/PageLayout';
@@ -26,6 +26,8 @@ import UserAccountStatistics from '../components/common/UserProfile/UserAccountS
 
 const UserProfile = () => {
   const [updateUserDetails, { isLoading, isError, error, isSuccess, data }] = useUpdateUserDetailsMutation();
+
+  const [updateUserPassword, { isLoading: passwordChangeLoading, isError: passwordChangeIsError, error: passwordChangeError, isSuccess: passwordChangeIsSuccess, data: passwordChangeData}] = useUpdateUserPasswordMutation();
 
   // Profile editing state
   const [isEditing, setIsEditing] = useState(false);
@@ -97,35 +99,37 @@ const UserProfile = () => {
 
   // Password change handler
   const handlePasswordChange = async () => {
+    // console.log (passwordData);
+
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
 
+    const requestBody = {
+      oldPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword
+    };
+
     try {
       // Simulate API call - replace with your actual password change API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await updateUserPassword(requestBody).unwrap();
+      console.log (result);
       
       setIsChangingPassword(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-      setSaveSuccess(true);
       toast.success('Password changed successfully!');
-      
-      setTimeout(() => setSaveSuccess(false), 3000);
+
+
     } catch (err) {
-      toast.error('Failed to change password');
+      console.error('Error:', err);
+      toast.error(`Unable to update password: ${err.data.message}`);
     }
   };
 
   return (
     <PageLayout>
-      {/* Success Message */}
-      {saveSuccess && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-pulse">
-          <CheckCircle size={20} />
-          <span>Changes saved successfully!</span>
-        </div>
-      )}
 
       {/* Header Section */}
       <PageHeaderSection

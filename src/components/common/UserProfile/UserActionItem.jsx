@@ -12,6 +12,13 @@ const buttonVariants = {
   danger: 'bg-red-100 text-red-600 hover:bg-red-200'
 };
 
+const disabledButtonVariants = {
+  default: 'bg-gray-100 text-gray-400 cursor-not-allowed',
+  primary: 'bg-gray-100 text-gray-400 cursor-not-allowed',
+  warning: 'bg-gray-100 text-gray-400 cursor-not-allowed',
+  danger: 'bg-gray-100 text-gray-400 cursor-not-allowed'
+};
+
 const UserActionItem = ({
   icon: Icon,
   title,
@@ -19,9 +26,10 @@ const UserActionItem = ({
   actionText,
   onAction,
   variant = 'default',
-  iconBg
+  iconBg,
+  disabled = false
 }) => {
-
+  
   return (
     <div className={`p-4 backdrop-blur-sm rounded-xl border border-gray-100 transition-all duration-200 ${variants[variant]}`}>
       <div className="flex items-center justify-between">
@@ -36,7 +44,10 @@ const UserActionItem = ({
         </div>
         <button
           onClick={onAction}
-          className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${buttonVariants[variant]}`}
+          className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            disabled ? disabledButtonVariants[variant] : buttonVariants[variant]
+          }`}
+          disabled={disabled}
         >
           {actionText}
         </button>

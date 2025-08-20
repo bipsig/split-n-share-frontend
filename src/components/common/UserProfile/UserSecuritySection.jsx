@@ -43,6 +43,7 @@ const UserSecuritySection = ({
             actionText="Manage"
             variant="default"
             iconBg="bg-gray-100 text-gray-600"
+            disabled={true}
           />
         </div>
       ) : (

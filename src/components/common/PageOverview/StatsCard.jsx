@@ -38,7 +38,7 @@ const StatsCard = ({
             <p className={`text-3xl lg:text-4xl font-bold mb-3 ${valueClassName || 'text-gray-800'}`}>
               {value}
             </p>
-            <p className="text-sm text-gray-600">{subtitle}</p>
+            <div className="text-sm text-gray-600">{subtitle}</div>
           </>
         )}
       </div>
