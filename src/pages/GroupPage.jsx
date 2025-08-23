@@ -34,7 +34,9 @@ import {
   AlertCircle,
   Coins,
   Share,
-  Share2Icon
+  Share2Icon,
+  IndianRupee,
+  ReceiptIndianRupee
 } from 'lucide-react';
 
 const GroupPage = () => {
@@ -322,7 +324,7 @@ const GroupPage = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-xl sm:rounded-2xl"></div>
           <div className="relative z-10 text-center">
             <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-4 shadow-lg">
-              <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <IndianRupee className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
             </div>
             <h3 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 sm:mb-2">
               Total Spent
@@ -348,7 +350,7 @@ const GroupPage = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-xl sm:rounded-2xl"></div>
           <div className="relative z-10 text-center">
             <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-4 shadow-lg">
-              <Receipt className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+              <ReceiptIndianRupee className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
             </div>
             <h3 className="text-xs sm:text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 sm:mb-2">
               Transactions

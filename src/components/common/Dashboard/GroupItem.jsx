@@ -1,7 +1,8 @@
 import React from 'react';
 import { Users } from 'lucide-react';
-import { parseAmount } from '../../../utils/themes/parseAmount';
+// import { parseAmount } from '../utils/parseAmount';
 import { parseGroupMembers } from '../../../utils/parseGroupMembers';
+import { parseAmount } from '../../../utils/parseAmount';
 
 const GroupItem = ({ group, index }) => {
   const subheading = parseGroupMembers(group.members);

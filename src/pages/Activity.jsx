@@ -26,7 +26,7 @@ import {
   Check
 } from 'lucide-react';
 import { parseTime } from '../utils/parseTime';
-import { parseAmount } from '../utils/themes/parseAmount';
+import { parseAmount } from '../utils/parseAmount';
 
 const ActivityPage = () => {
   const [filterType, setFilterType] = useState('all');

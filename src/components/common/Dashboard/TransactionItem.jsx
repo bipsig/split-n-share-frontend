@@ -1,6 +1,6 @@
 import React from 'react';
 import { Home } from 'lucide-react';
-import { parseAmount } from '../../../utils/themes/parseAmount';
+import { parseAmount } from '../../../utils/parseAmount';
 import { parseTime } from '../../../utils/parseTime';
 
 

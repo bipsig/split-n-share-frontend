@@ -3,7 +3,7 @@ import { HandCoins, Home, Loader2, Users, Plus, TrendingUp, Activity, CreditCard
 import { useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery } from '../redux/slices/api/usersApi';
 import { parseTime } from '../utils/parseTime';
 import { parseGroupMembers } from '../utils/parseGroupMembers';
-import { parseAmount } from '../utils/themes/parseAmount';
+import { parseAmount } from '../utils/parseAmount';
 import HeaderWithSubtitle from '../components/common/PageHeader/HeaderWithSubtitle';
 import PageLayout from '../layouts/PageLayout';
 import HeaderButton from '../components/common/PageHeader/HeaderButton';

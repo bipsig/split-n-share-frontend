@@ -4,16 +4,14 @@ import {
   Edit3,
   Save,
   X,
-  CheckCircle,
   Users,
   TrendingUp,
   Activity,
 } from 'lucide-react';
-import { parseAmount } from '../utils/themes/parseAmount';
+import { parseAmount } from '../utils/parseAmount';
 import useUser from '../hooks/useUser';
 import { useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from '../redux/slices/api/usersApi';
 import toast from 'react-hot-toast';
-import HeaderWithSubtitle from '../components/common/PageHeader/HeaderWithSubtitle';
 import PageLayout from '../layouts/PageLayout';
 import HeaderButton from '../components/common/PageHeader/HeaderButton';
 import PageHeaderSection from '../layouts/PageHeaderSection';
@@ -21,7 +19,6 @@ import PageOverviewSection from '../layouts/PageOverviewSection';
 import StatsCard from '../components/common/PageOverview/StatsCard';
 import UserProfileCard from '../components/common/UserProfile/UserProfileCard';
 import UserSecuritySection from '../components/common/UserProfile/UserSecuritySection';
-import UserAccountActions from '../components/common/UserProfile/UserAccountActions';
 import UserAccountStatistics from '../components/common/UserProfile/UserAccountStatistics';
 
 const UserProfile = () => {
@@ -31,7 +28,6 @@ const UserProfile = () => {
 
   // Profile editing state
   const [isEditing, setIsEditing] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Password change state
   const [isChangingPassword, setIsChangingPassword] = useState(false);
