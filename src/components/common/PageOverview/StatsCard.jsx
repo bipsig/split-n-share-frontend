@@ -7,7 +7,8 @@ const iconColorThemes = {
   purple: 'from-purple-500 to-purple-600',
   green: 'from-green-500 to-green-600',
   red: 'from-red-500 to-red-600',
-  gray: 'from-gray-500 to-gray-600'
+  gray: 'from-gray-500 to-gray-600',
+  yellow: 'from-yellow-500 to-yellow-600'
 };
 
 const StatsCard = ({
@@ -18,7 +19,8 @@ const StatsCard = ({
   colorTheme = 'blue',
   isLoading = false,
   valueClassName = '',
-  className = ''
+  className = '',
+  size = 'default'
 }) => {
   return (
     <GlassCard colorTheme={colorTheme} className={className}>
@@ -35,7 +37,7 @@ const StatsCard = ({
             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
               {title}
             </h3>
-            <p className={`text-3xl lg:text-4xl font-bold mb-3 ${valueClassName || 'text-gray-800'}`}>
+            <p className={`${size === 'small' ? 'text-xl lg:text-2xl' : 'text-3xl lg:text-4xl'} font-bold mb-3 ${valueClassName || 'text-gray-800'}`}>
               {value}
             </p>
             <div className="text-sm text-gray-600">{subtitle}</div>

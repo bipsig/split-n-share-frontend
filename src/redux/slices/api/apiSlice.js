@@ -18,5 +18,6 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQuery,
   tagTypes: ['Auth', 'User', 'Group', 'Transaction'],
-  endpoints: () => ({})
+  endpoints: () => ({}),
+  keepUnusedDataFor: 0
 });

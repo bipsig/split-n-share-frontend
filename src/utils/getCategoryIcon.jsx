@@ -1,11 +1,18 @@
 import { Briefcase, Circle, Heart, Home, Plane } from "lucide-react";
 
-export const getCategoryIcon = (category) => {
+const sizeVariants = {
+  small: 'w-4 h-4',
+  medium: 'w-5 h-5',
+  large: 'w-g h-6'
+};
+
+export const getCategoryIcon = (category, variant="small") => {
+  const classes = sizeVariants[variant];
   switch (category) {
-    case 'Home': return <Home className="w-4 h-4" />;
-    case 'Trip': return <Plane className="w-4 h-4" />;
-    case 'Office': return <Briefcase className="w-4 h-4" />;
-    case 'Friends': return <Heart className="w-4 h-4" />;
-    default: return <Circle className="w-4 h-4" />;
+    case 'Home': return <Home className={classes} />;
+    case 'Trip': return <Plane className={classes} />;
+    case 'Office': return <Briefcase className={classes} />;
+    case 'Friends': return <Heart className={classes} />;
+    default: return <Circle className={classes} />;
   }
 };

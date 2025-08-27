@@ -19,6 +19,8 @@ import GroupsListSkeleton from '../components/skeleton/GroupsListSkeleton';
 import GroupsListSection from '../layouts/GroupsListSection';
 import EmptyGroupsLists from '../components/common/Groups/EmptyGroupsLists';
 import GroupListCard from '../components/common/Groups/GroupListCard';
+import SearchBar from '../components/common/SearchBar/SearchBar';
+import FilterSelect from '../components/common/FilterSelect/FilterSelect';
 
 const Groups = () => {
   const { data, isLoading: isGroupsDataLoading, isError: isGroupsDataError } = useGetCompleteGroupsSummaryQuery();
@@ -28,6 +30,21 @@ const Groups = () => {
   const [filterStatus, setFilterStatus] = useState('all');
 
   const groupsData = data ? data.groupsSummary : [];
+
+  const categoryOptions = [
+    { id: 1, value: 'all', title: 'All Categories'},
+    { id: 2, value: 'Home', title: 'Home'},
+    { id: 3, value: 'Trip', title: 'Trip'},
+    { id: 4, value: 'Office', title: 'Office'},
+    { id: 5, value: 'Friends', title: 'Friends'},
+    { id: 6, value: 'Other', title: 'Other'},
+  ]
+
+    const statusOptions = [
+    {id: 1, value: 'all', title: 'All Status'},
+    {id: 2, value: 'active', title: 'Active'},
+    {id: 3, value: 'inactive', title: 'Inactive'}
+  ];
 
   const filteredGroups = groupsData.filter(group => {
     const matchesSearch = group.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -62,41 +79,22 @@ const Groups = () => {
         <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20">
           <div className="flex flex-col lg:flex-row gap-4 items-center">
             {/* Search Bar */}
-            <div className="relative flex-1 w-full lg:w-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search groups..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-all duration-200 shadow-md"
-              />
-            </div>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search groups..."/>
 
             {/* Filters */}
+            
             <div className="flex gap-3 w-full lg:w-auto">
-              <select
-                value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
-                className="px-4 py-3 bg-white border-2 border-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-all duration-200 text-sm font-medium shadow-md"
-              >
-                <option value="all">All Categories</option>
-                <option value="Home">Home</option>
-                <option value="Trip">Trip</option>
-                <option value="Office">Office</option>
-                <option value="Friends">Friends</option>
-                <option value="Other">Other</option>
-              </select>
+              <FilterSelect
+                filterType={filterCategory}
+                setFilterType={setFilterCategory}
+                options={categoryOptions} 
+              />
 
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-3 bg-white border-2 border-gray-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-600 transition-all duration-200 text-sm font-medium shadow-md"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
+              <FilterSelect
+              filterType={filterStatus}
+              setFilterType={setFilterStatus}
+              options={statusOptions} 
+              />
             </div>
           </div>
         </div>
