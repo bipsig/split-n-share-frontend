@@ -59,7 +59,7 @@ import PendingMemberList from '../components/GroupPage/MemberList/PendingMemberL
 import MemberListHeader from '../components/GroupPage/MemberList/MemberListHeader';
 import GroupBalanceHeader from '../components/GroupPage/GroupBalances/GroupBalanceHeader';
 import GroupBalanceList from '../components/GroupPage/GroupBalances/GroupBalanceList/GroupBalanceList';
-import { useGetIndividualGroupDetailsQuery } from '../redux/slices/api/groupsApi';
+import { useGetIndividualGroupDetailsQuery, useGetIndividualGroupTransactionsQuery } from '../redux/slices/api/groupsApi';
 import { useParams } from 'react-router-dom';
 import GroupDetailPageSkeleton from '../components/skeleton/GroupDetailsPage/GroupDetailsSkeleton';
 import MyBalancesTab from '../components/GroupPage/MyBalances/MyBalancesTab';
@@ -74,8 +74,10 @@ const GroupPage = () => {
 
   const { id } = useParams();
   const { data: group, isLoading: isGroupLoading, isError: isGroupError } = useGetIndividualGroupDetailsQuery(id);
+  const { data: transactions, isLoading: isTransactionsLoading, isError: isTransactionsError} = useGetIndividualGroupTransactionsQuery(id);
 
   const groupData = group ? group.groupData : [];
+  const transactionsData = transactions ? transactions.transactionsData : [];
 
 
   // Dummy group data
@@ -107,146 +109,146 @@ const GroupPage = () => {
 
   // Dummy transactions data matching the transaction schema
   // const transactionsData = []
-  const transactionsData = [
-    {
-      _id: 'trans1',
-      description: 'Electricity Bill - January',
-      slug: 'electricity-bill-january',
-      amount: 2500.00,
-      user_added: {
-        userId: 'user1',
-        username: 'John Doe'
-      },
-      user_paid: {
-        userId: 'user1',
-        username: 'John Doe'
-      },
-      users_involved: [
-        { user: 'user1', username: 'John Doe', share: 625.00 },
-        { user: 'user2', username: 'Jane Smith', share: 625.00 },
-        { user: 'user3', username: 'Bob Wilson', share: 625.00 },
-        { user: 'user4', username: 'Alice Brown', share: 625.00 }
-      ],
-      isSettled: false,
-      groupId: '1',
-      groupSlug: 'family-house',
-      note: 'Monthly electricity bill for the house',
-      type: 'Expense',
-      picturePath: '',
-      currency: 'INR',
-      createdAt: '2024-08-10T09:30:00Z'
-    },
-    {
-      _id: 'trans2',
-      description: 'Grocery Shopping - Weekly',
-      slug: 'grocery-shopping-weekly',
-      amount: 3200.00,
-      user_added: {
-        userId: 'user2',
-        username: 'Jane Smith'
-      },
-      user_paid: {
-        userId: 'user2',
-        username: 'Jane Smith'
-      },
-      users_involved: [
-        { user: 'user1', username: 'John Doe', share: 800.00 },
-        { user: 'user2', username: 'Jane Smith', share: 800.00 },
-        { user: 'user3', username: 'Bob Wilson', share: 800.00 },
-        { user: 'user4', username: 'Alice Brown', share: 800.00 }
-      ],
-      isSettled: false,
-      groupId: '1',
-      groupSlug: 'family-house',
-      note: 'Weekly grocery haul from the supermarket',
-      type: 'Expense',
-      picturePath: '',
-      currency: 'INR',
-      createdAt: '2024-08-08T15:45:00Z'
-    },
-    {
-      _id: 'trans3',
-      description: 'Internet Bill Payment',
-      slug: 'internet-bill-payment',
-      amount: 1500.00,
-      user_added: {
-        userId: 'user3',
-        username: 'Bob Wilson'
-      },
-      user_paid: {
-        userId: 'user3',
-        username: 'Bob Wilson'
-      },
-      users_involved: [
-        { user: 'user1', username: 'John Doe', share: 375.00 },
-        { user: 'user2', username: 'Jane Smith', share: 375.00 },
-        { user: 'user3', username: 'Bob Wilson', share: 375.00 },
-        { user: 'user4', username: 'Alice Brown', share: 375.00 }
-      ],
-      isSettled: true,
-      groupId: '1',
-      groupSlug: 'family-house',
-      note: 'Monthly broadband internet bill',
-      type: 'Expense',
-      picturePath: '',
-      currency: 'INR',
-      createdAt: '2024-08-05T11:20:00Z'
-    },
-    {
-      _id: 'trans4',
-      description: 'Partial Payment to John',
-      slug: 'partial-payment-to-john',
-      amount: 1000.00,
-      user_added: {
-        userId: 'user2',
-        username: 'Jane Smith'
-      },
-      user_paid: {
-        userId: 'user2',
-        username: 'Jane Smith'
-      },
-      users_involved: [
-        { user: 'user1', username: 'John Doe', share: -1000.00 },
-        { user: 'user2', username: 'Jane Smith', share: 1000.00 }
-      ],
-      isSettled: true,
-      groupId: '1',
-      groupSlug: 'family-house',
-      note: 'Partial settlement for previous expenses',
-      type: 'Payment',
-      picturePath: '',
-      currency: 'INR',
-      createdAt: '2024-08-03T18:30:00Z'
-    },
-    {
-      _id: 'trans5',
-      description: 'House Cleaning Service',
-      slug: 'house-cleaning-service',
-      amount: 800.00,
-      user_added: {
-        userId: 'user4',
-        username: 'Alice Brown'
-      },
-      user_paid: {
-        userId: 'user4',
-        username: 'Alice Brown'
-      },
-      users_involved: [
-        { user: 'user1', username: 'John Doe', share: 200.00 },
-        { user: 'user2', username: 'Jane Smith', share: 200.00 },
-        { user: 'user3', username: 'Bob Wilson', share: 200.00 },
-        { user: 'user4', username: 'Alice Brown', share: 200.00 }
-      ],
-      isSettled: false,
-      groupId: '1',
-      groupSlug: 'family-house',
-      note: 'Professional cleaning service',
-      type: 'Expense',
-      picturePath: '',
-      currency: 'INR',
-      createdAt: '2024-08-01T14:15:00Z'
-    }
-  ];
+  // const transactionsData = [
+  //   {
+  //     _id: 'trans1',
+  //     description: 'Electricity Bill - January',
+  //     slug: 'electricity-bill-january',
+  //     amount: 2500.00,
+  //     user_added: {
+  //       userId: 'user1',
+  //       username: 'John Doe'
+  //     },
+  //     user_paid: {
+  //       userId: 'user1',
+  //       username: 'John Doe'
+  //     },
+  //     users_involved: [
+  //       { user: 'user1', username: 'John Doe', share: 625.00 },
+  //       { user: 'user2', username: 'Jane Smith', share: 625.00 },
+  //       { user: 'user3', username: 'Bob Wilson', share: 625.00 },
+  //       { user: 'user4', username: 'Alice Brown', share: 625.00 }
+  //     ],
+  //     isSettled: false,
+  //     groupId: '1',
+  //     groupSlug: 'family-house',
+  //     note: 'Monthly electricity bill for the house',
+  //     type: 'Expense',
+  //     picturePath: '',
+  //     currency: 'INR',
+  //     createdAt: '2024-08-10T09:30:00Z'
+  //   },
+  //   {
+  //     _id: 'trans2',
+  //     description: 'Grocery Shopping - Weekly',
+  //     slug: 'grocery-shopping-weekly',
+  //     amount: 3200.00,
+  //     user_added: {
+  //       userId: 'user2',
+  //       username: 'Jane Smith'
+  //     },
+  //     user_paid: {
+  //       userId: 'user2',
+  //       username: 'Jane Smith'
+  //     },
+  //     users_involved: [
+  //       { user: 'user1', username: 'John Doe', share: 800.00 },
+  //       { user: 'user2', username: 'Jane Smith', share: 800.00 },
+  //       { user: 'user3', username: 'Bob Wilson', share: 800.00 },
+  //       { user: 'user4', username: 'Alice Brown', share: 800.00 }
+  //     ],
+  //     isSettled: false,
+  //     groupId: '1',
+  //     groupSlug: 'family-house',
+  //     note: 'Weekly grocery haul from the supermarket',
+  //     type: 'Expense',
+  //     picturePath: '',
+  //     currency: 'INR',
+  //     createdAt: '2024-08-08T15:45:00Z'
+  //   },
+  //   {
+  //     _id: 'trans3',
+  //     description: 'Internet Bill Payment',
+  //     slug: 'internet-bill-payment',
+  //     amount: 1500.00,
+  //     user_added: {
+  //       userId: 'user3',
+  //       username: 'Bob Wilson'
+  //     },
+  //     user_paid: {
+  //       userId: 'user3',
+  //       username: 'Bob Wilson'
+  //     },
+  //     users_involved: [
+  //       { user: 'user1', username: 'John Doe', share: 375.00 },
+  //       { user: 'user2', username: 'Jane Smith', share: 375.00 },
+  //       { user: 'user3', username: 'Bob Wilson', share: 375.00 },
+  //       { user: 'user4', username: 'Alice Brown', share: 375.00 }
+  //     ],
+  //     isSettled: true,
+  //     groupId: '1',
+  //     groupSlug: 'family-house',
+  //     note: 'Monthly broadband internet bill',
+  //     type: 'Expense',
+  //     picturePath: '',
+  //     currency: 'INR',
+  //     createdAt: '2024-08-05T11:20:00Z'
+  //   },
+  //   {
+  //     _id: 'trans4',
+  //     description: 'Partial Payment to John',
+  //     slug: 'partial-payment-to-john',
+  //     amount: 1000.00,
+  //     user_added: {
+  //       userId: 'user2',
+  //       username: 'Jane Smith'
+  //     },
+  //     user_paid: {
+  //       userId: 'user2',
+  //       username: 'Jane Smith'
+  //     },
+  //     users_involved: [
+  //       { user: 'user1', username: 'John Doe', share: -1000.00 },
+  //       { user: 'user2', username: 'Jane Smith', share: 1000.00 }
+  //     ],
+  //     isSettled: true,
+  //     groupId: '1',
+  //     groupSlug: 'family-house',
+  //     note: 'Partial settlement for previous expenses',
+  //     type: 'Payment',
+  //     picturePath: '',
+  //     currency: 'INR',
+  //     createdAt: '2024-08-03T18:30:00Z'
+  //   },
+  //   {
+  //     _id: 'trans5',
+  //     description: 'House Cleaning Service',
+  //     slug: 'house-cleaning-service',
+  //     amount: 800.00,
+  //     user_added: {
+  //       userId: 'user4',
+  //       username: 'Alice Brown'
+  //     },
+  //     user_paid: {
+  //       userId: 'user4',
+  //       username: 'Alice Brown'
+  //     },
+  //     users_involved: [
+  //       { user: 'user1', username: 'John Doe', share: 200.00 },
+  //       { user: 'user2', username: 'Jane Smith', share: 200.00 },
+  //       { user: 'user3', username: 'Bob Wilson', share: 200.00 },
+  //       { user: 'user4', username: 'Alice Brown', share: 200.00 }
+  //     ],
+  //     isSettled: false,
+  //     groupId: '1',
+  //     groupSlug: 'family-house',
+  //     note: 'Professional cleaning service',
+  //     type: 'Expense',
+  //     picturePath: '',
+  //     currency: 'INR',
+  //     createdAt: '2024-08-01T14:15:00Z'
+  //   }
+  // ];
 
   const filterOptions = [
     { id: 1, value: 'all', title: 'All Types' },
@@ -266,11 +268,11 @@ const GroupPage = () => {
     return matchesSearch && matchesFilter;
   });
 
-  if (isGroupLoading) {
+  if (isGroupLoading || isTransactionsLoading) {
     return <GroupDetailPageSkeleton />;
   }
 
-  if (isGroupError) {
+  if (isGroupError || isTransactionsError) {
     return <PageLayout><p className="text-red-500">Failed to load group data.</p></PageLayout>;
   }
 

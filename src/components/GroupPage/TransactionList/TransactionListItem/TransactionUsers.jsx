@@ -3,7 +3,7 @@ import React from 'react'
 const TransactionUsers = ({ transaction }) => {
   return (
     <div className="flex items-center gap-2 mb-2 flex-wrap">
-      <span className="text-xs text-gray-500 whitespace-nowrap">Split among:</span>
+      <span className="text-xs text-gray-500 whitespace-nowrap">{transaction.type === 'Expense' ? 'Split among:' : 'Paid to: '}</span>
       <div className="flex items-center gap-1">
         {transaction.users_involved.slice(0, 3).map((user, idx) => (
           <div key={idx} className="relative group/user">

@@ -34,8 +34,19 @@ export const groupsApi = apiSlice.injectEndpoints({
         }
         return response.data;
       }
+    }),
+    getIndividualGroupTransactions: builder.query({
+      query: (groupId) => ({
+        url: `groups/${groupId}/transactions`
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response.data;
+      }
     })
   }),
 });
 
-export const { useGetUserGroupsQuery, useGetCompleteGroupsSummaryQuery, useGetIndividualGroupDetailsQuery } = groupsApi;
+export const { useGetUserGroupsQuery, useGetCompleteGroupsSummaryQuery, useGetIndividualGroupDetailsQuery, useGetIndividualGroupTransactionsQuery } = groupsApi;
