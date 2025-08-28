@@ -3,38 +3,10 @@ import {
   ArrowLeft,
   Users,
   Plus,
-  Settings,
-  MoreVertical,
-  Home,
-  Plane,
-  Briefcase,
-  Heart,
-  Circle,
-  Crown,
-  Calendar,
   TrendingUp,
   TrendingDown,
-  Receipt,
-  DollarSign,
-  User,
-  Clock,
-  Camera,
-  Edit,
-  Trash2,
-  UserPlus,
   CreditCard,
-  CheckCircle,
-  XCircle,
-  FileText,
   Share2,
-  Download,
-  Filter,
-  Search,
-  Eye,
-  AlertCircle,
-  Coins,
-  Share,
-  Share2Icon,
   IndianRupee,
   ReceiptIndianRupee
 } from 'lucide-react';
@@ -46,13 +18,8 @@ import { getActiveMembers } from '../utils/members';
 import PageLayout from '../layouts/PageLayout';
 import StatsCard from '../components/common/PageOverview/StatsCard';
 import TabNavigationBar from '../components/GroupPage/TabNavigationBar';
-import SearchBar from '../components/common/SearchBar/SearchBar';
-import FilterSelect from '../components/common/FilterSelect/FilterSelect';
 import SearchAndFilter from '../components/GroupPage/SearchAndFilter';
 import EmptyTransactionList from '../components/GroupPage/TransactionList/EmptyTransactionList';
-import TransactionIcon from '../components/GroupPage/TransactionList/TransactionListItem/TransactionIcon';
-import TransactionDetails from '../components/GroupPage/TransactionList/TransactionListItem/TransactionDetails';
-import TransactionAmount from '../components/GroupPage/TransactionList/TransactionListItem/TransactionAmount';
 import TransactionList from '../components/GroupPage/TransactionList/TransactionList';
 import MemberList from '../components/GroupPage/MemberList/MemberList';
 import PendingMemberList from '../components/GroupPage/MemberList/PendingMemberList';
@@ -79,186 +46,11 @@ const GroupPage = () => {
   const groupData = group ? group.groupData : [];
   const transactionsData = transactions ? transactions.transactionsData : [];
 
-
-  // Dummy group data
-  // const groupData = {
-  //   _id: '1',
-  //   name: 'Family House',
-  //   description: 'Monthly household expenses and utilities',
-  //   category: 'Home',
-  //   totalBalance: 2450.75,
-  //   currency: 'INR',
-  //   isActive: true,
-  //   createdBy: 'user1',
-  //   createdAt: '2024-01-15T10:30:00Z',
-  //   picturePath: '',
-  //   members: [
-  //     { user: 'user1', username: 'John Doe', role: 'Admin', status: 'active', joinedAt: '2024-01-15T10:30:00Z' },
-  //     { user: 'user2', username: 'Jane Smith', role: 'Member', status: 'active', joinedAt: '2024-01-16T14:20:00Z' },
-  //     { user: 'user3', username: 'Bob Wilson', role: 'Member', status: 'active', joinedAt: '2024-01-17T09:15:00Z' },
-  //     { user: 'user4', username: 'Alice Brown', role: 'Member', status: 'pending', joinedAt: '2024-01-18T16:45:00Z' }
-  //   ],
-  //   // User balances within the group
-  //   memberBalances: [
-  //     { userId: 'user1', username: 'John Doe', balance: 850.25 },
-  //     { userId: 'user2', username: 'Jane Smith', balance: -450.75 },
-  //     { userId: 'user3', username: 'Bob Wilson', balance: 200.50 },
-  //     { userId: 'user4', username: 'Alice Brown', balance: -600.00 }
-  //   ]
-  // };
-
-  // Dummy transactions data matching the transaction schema
-  // const transactionsData = []
-  // const transactionsData = [
-  //   {
-  //     _id: 'trans1',
-  //     description: 'Electricity Bill - January',
-  //     slug: 'electricity-bill-january',
-  //     amount: 2500.00,
-  //     user_added: {
-  //       userId: 'user1',
-  //       username: 'John Doe'
-  //     },
-  //     user_paid: {
-  //       userId: 'user1',
-  //       username: 'John Doe'
-  //     },
-  //     users_involved: [
-  //       { user: 'user1', username: 'John Doe', share: 625.00 },
-  //       { user: 'user2', username: 'Jane Smith', share: 625.00 },
-  //       { user: 'user3', username: 'Bob Wilson', share: 625.00 },
-  //       { user: 'user4', username: 'Alice Brown', share: 625.00 }
-  //     ],
-  //     isSettled: false,
-  //     groupId: '1',
-  //     groupSlug: 'family-house',
-  //     note: 'Monthly electricity bill for the house',
-  //     type: 'Expense',
-  //     picturePath: '',
-  //     currency: 'INR',
-  //     createdAt: '2024-08-10T09:30:00Z'
-  //   },
-  //   {
-  //     _id: 'trans2',
-  //     description: 'Grocery Shopping - Weekly',
-  //     slug: 'grocery-shopping-weekly',
-  //     amount: 3200.00,
-  //     user_added: {
-  //       userId: 'user2',
-  //       username: 'Jane Smith'
-  //     },
-  //     user_paid: {
-  //       userId: 'user2',
-  //       username: 'Jane Smith'
-  //     },
-  //     users_involved: [
-  //       { user: 'user1', username: 'John Doe', share: 800.00 },
-  //       { user: 'user2', username: 'Jane Smith', share: 800.00 },
-  //       { user: 'user3', username: 'Bob Wilson', share: 800.00 },
-  //       { user: 'user4', username: 'Alice Brown', share: 800.00 }
-  //     ],
-  //     isSettled: false,
-  //     groupId: '1',
-  //     groupSlug: 'family-house',
-  //     note: 'Weekly grocery haul from the supermarket',
-  //     type: 'Expense',
-  //     picturePath: '',
-  //     currency: 'INR',
-  //     createdAt: '2024-08-08T15:45:00Z'
-  //   },
-  //   {
-  //     _id: 'trans3',
-  //     description: 'Internet Bill Payment',
-  //     slug: 'internet-bill-payment',
-  //     amount: 1500.00,
-  //     user_added: {
-  //       userId: 'user3',
-  //       username: 'Bob Wilson'
-  //     },
-  //     user_paid: {
-  //       userId: 'user3',
-  //       username: 'Bob Wilson'
-  //     },
-  //     users_involved: [
-  //       { user: 'user1', username: 'John Doe', share: 375.00 },
-  //       { user: 'user2', username: 'Jane Smith', share: 375.00 },
-  //       { user: 'user3', username: 'Bob Wilson', share: 375.00 },
-  //       { user: 'user4', username: 'Alice Brown', share: 375.00 }
-  //     ],
-  //     isSettled: true,
-  //     groupId: '1',
-  //     groupSlug: 'family-house',
-  //     note: 'Monthly broadband internet bill',
-  //     type: 'Expense',
-  //     picturePath: '',
-  //     currency: 'INR',
-  //     createdAt: '2024-08-05T11:20:00Z'
-  //   },
-  //   {
-  //     _id: 'trans4',
-  //     description: 'Partial Payment to John',
-  //     slug: 'partial-payment-to-john',
-  //     amount: 1000.00,
-  //     user_added: {
-  //       userId: 'user2',
-  //       username: 'Jane Smith'
-  //     },
-  //     user_paid: {
-  //       userId: 'user2',
-  //       username: 'Jane Smith'
-  //     },
-  //     users_involved: [
-  //       { user: 'user1', username: 'John Doe', share: -1000.00 },
-  //       { user: 'user2', username: 'Jane Smith', share: 1000.00 }
-  //     ],
-  //     isSettled: true,
-  //     groupId: '1',
-  //     groupSlug: 'family-house',
-  //     note: 'Partial settlement for previous expenses',
-  //     type: 'Payment',
-  //     picturePath: '',
-  //     currency: 'INR',
-  //     createdAt: '2024-08-03T18:30:00Z'
-  //   },
-  //   {
-  //     _id: 'trans5',
-  //     description: 'House Cleaning Service',
-  //     slug: 'house-cleaning-service',
-  //     amount: 800.00,
-  //     user_added: {
-  //       userId: 'user4',
-  //       username: 'Alice Brown'
-  //     },
-  //     user_paid: {
-  //       userId: 'user4',
-  //       username: 'Alice Brown'
-  //     },
-  //     users_involved: [
-  //       { user: 'user1', username: 'John Doe', share: 200.00 },
-  //       { user: 'user2', username: 'Jane Smith', share: 200.00 },
-  //       { user: 'user3', username: 'Bob Wilson', share: 200.00 },
-  //       { user: 'user4', username: 'Alice Brown', share: 200.00 }
-  //     ],
-  //     isSettled: false,
-  //     groupId: '1',
-  //     groupSlug: 'family-house',
-  //     note: 'Professional cleaning service',
-  //     type: 'Expense',
-  //     picturePath: '',
-  //     currency: 'INR',
-  //     createdAt: '2024-08-01T14:15:00Z'
-  //   }
-  // ];
-
   const filterOptions = [
     { id: 1, value: 'all', title: 'All Types' },
     { id: 2, value: 'expense', title: 'Expenses' },
     { id: 3, value: 'payment', title: 'Payments' }
   ];
-
-  const getTotalExpenses = () => {
-    return transactionsData.filter(t => t.type === 'Expense').reduce((sum, t) => sum + t.amount, 0);
-  };
 
   const filteredTransactions = transactionsData.filter(transaction => {
     const matchesSearch = transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -15,7 +15,7 @@ const TabNavigationBar = ({ activeTab, setActiveTab }) => {
         <button
           key={tab.id}
           onClick={() => setActiveTab(tab.id)}
-          className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-3 sm:py-4 font-medium transition-all duration-200 whitespace-nowrap text-sm sm:text-base ${activeTab === tab.id
+          className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-3 sm:py-4 font-medium transition-all duration-200 whitespace-nowrap text-sm sm:text-base cursor-pointer ${activeTab === tab.id
             ? 'text-blue-600 bg-blue-50/50 border-b-2 border-blue-600'
             : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50/50'
             }`}
