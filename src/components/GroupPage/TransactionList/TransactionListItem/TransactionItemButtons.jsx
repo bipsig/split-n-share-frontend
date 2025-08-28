@@ -1,4 +1,4 @@
-import { Edit, Eye, MoreVertical } from 'lucide-react';
+import { Edit, Eye, Trash2 } from 'lucide-react';
 import React from 'react'
 
 const TransactionItemButtons = () => {
@@ -11,7 +11,7 @@ const TransactionItemButtons = () => {
         <Edit size={14} className="sm:w-4 sm:h-4" />
       </button>
       <button className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all duration-200">
-        <MoreVertical size={14} className="sm:w-4 sm:h-4" />
+        <Trash2 size={14} className=" text-red-500 sm:w-4 sm:h-4" />
       </button>
     </div>
   )

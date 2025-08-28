@@ -73,8 +73,20 @@ export const usersApi = apiSlice.injectEndpoints({
 
         return response.data;
       }
+    }),
+    getUserTransactionDetails: builder.query({
+      query: () => ({
+        url: '/users/all-transactions'
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+
+        return response.data;
+      }
     })
   })
 })
 
-export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } = usersApi;
+export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation, useGetUserTransactionDetailsQuery } = usersApi;
