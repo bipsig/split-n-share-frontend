@@ -21,7 +21,7 @@ import useUser from '../../../hooks/useUser';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { apiSlice } from '../../../redux/slices/api/apiSlice';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const items = [
   { key: 1, title: 'Dashboard', path: '/user/dashboard', icon: LayoutDashboard },
@@ -31,11 +31,13 @@ const items = [
   { key: 5, title: 'Reports', path: '/user/reports', icon: BarChart3 },
 ];
 
-
 const UserSidebar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('Dashboard'); // Demo active state
+  const [activeItem, setActiveItem] = useState('Dashboard');
+
+  // Create ref for the main content area
+  const mainContentRef = useRef(null);
 
   // API hooks
   const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
@@ -46,6 +48,13 @@ const UserSidebar = () => {
   const dispatch = useDispatch();
 
   const location = useLocation();
+
+  // Reset scroll position when route changes
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
 
   const toggleMenuOpen = () => setMenuOpen(!menuOpen);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -181,7 +190,7 @@ const UserSidebar = () => {
                     <SidebarItemGroup 
                       key={group.group} 
                       group={group} 
-                      isActive={`/user/groups/${group.groupId}` === location.pathname} // You can add logic for active group
+                      isActive={`/user/groups/${group.groupId}` === location.pathname}
                     />
                   ))
                 ) : (
@@ -246,7 +255,10 @@ const UserSidebar = () => {
       </aside>
 
       {/* Main Content - Outlet for child routes */}
-      <main className="flex-1 h-screen overflow-y-auto bg-gray-50 pt-16 lg:pt-0">
+      <main 
+        ref={mainContentRef}
+        className="flex-1 h-screen overflow-y-auto bg-gray-50 pt-16 lg:pt-0"
+      >
         <div className="p-4 lg:p-6">
           <Outlet />
         </div>
