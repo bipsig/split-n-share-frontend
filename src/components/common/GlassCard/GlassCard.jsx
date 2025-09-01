@@ -24,6 +24,10 @@ const colorThemes = {
   yellow: {
     bg: 'from-white via-white to-yellow-50',
     overlay: 'from-yellow-500/5 to-orange-500/5'
+  },
+  orange: {
+    bg: 'from-white via-white to-orange-50',
+    overlay: 'from-orange-500/5 to-red-500/5'
   }
 };
 

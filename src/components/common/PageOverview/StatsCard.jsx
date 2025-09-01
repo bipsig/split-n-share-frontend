@@ -8,7 +8,8 @@ const iconColorThemes = {
   green: 'from-green-500 to-green-600',
   red: 'from-red-500 to-red-600',
   gray: 'from-gray-500 to-gray-600',
-  yellow: 'from-yellow-500 to-yellow-600'
+  yellow: 'from-yellow-500 to-yellow-600',
+  orange: 'from-orange-500 to-orange-600'
 };
 
 const StatsCard = ({
