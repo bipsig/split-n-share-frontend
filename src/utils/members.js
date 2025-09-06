@@ -1,5 +1,4 @@
 export const getActiveMembers = (members) => {
-  console.log ('In Function', members);
   return members?.filter(member => member.status === 'active').length || 0;
 };
 

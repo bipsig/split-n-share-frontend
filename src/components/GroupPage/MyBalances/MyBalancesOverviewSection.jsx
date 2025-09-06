@@ -5,7 +5,6 @@ import StatsCard from '../../common/PageOverview/StatsCard';
 
 const MyBalancesOverviewSection = ({ userBalances }) => {
   let youOwe = 0, youAreOwed = 0;
-  console.log (userBalances) ;
 
   Object.entries(userBalances).forEach(([username, balance]) => {
     if (balance > 0) {

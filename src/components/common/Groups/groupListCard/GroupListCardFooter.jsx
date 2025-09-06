@@ -4,7 +4,6 @@ import { parseTime } from '../../../../utils/parseTime'
 import { Link } from 'react-router-dom'
 
 const GroupListCardFooter = ({ group }) => {
-  console.log (group);
   return (
     <div className="flex items-center justify-between pt-4 border-t border-gray-200/50">
       <div className="flex items-center gap-1 text-xs text-gray-500">

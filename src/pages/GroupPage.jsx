@@ -43,8 +43,16 @@ const GroupPage = () => {
   const { data: group, isLoading: isGroupLoading, isError: isGroupError } = useGetIndividualGroupDetailsQuery(id);
   const { data: transactions, isLoading: isTransactionsLoading, isError: isTransactionsError} = useGetIndividualGroupTransactionsQuery(id);
 
-  const groupData = group ? group.groupData : [];
+  const groupData = group ? group.groupData : {};
   const transactionsData = transactions ? transactions.transactionsData : [];
+
+  let isCurrentUserAdmin = false;
+
+  if (groupData?.members) {
+    isCurrentUserAdmin = groupData.members.find((member) => {
+      return member.username === currentUsername;
+    }).role === 'Admin'
+  }
 
   const filterOptions = [
     { id: 1, value: 'all', title: 'All Types' },
@@ -205,7 +213,7 @@ const GroupPage = () => {
               <MemberListHeader />
 
               {groupData.members.map((member) => (
-                <MemberList member={member} />
+                <MemberList member={member} isCurrentUserAdmin={isCurrentUserAdmin} />
               ))}
 
               {groupData.members.filter(m => m.status === 'pending').length > 0 && (

@@ -7,7 +7,6 @@ import { generateUserBalanceBreakdown } from '../../../utils/generateUserBalance
 
 const MyBalancesTab = ({ user, transactionMatrix }) => {
   const userBalances = generateUserBalanceBreakdown(user, transactionMatrix.matrix);
-  console.log (userBalances);
   return (
     <div className="space-y-4">
       <MyBalancesHeader />

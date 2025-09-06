@@ -45,8 +45,21 @@ export const groupsApi = apiSlice.injectEndpoints({
         }
         return response.data;
       }
+    }),
+    toggleAdminStatus: builder.mutation({
+      query: ({ groupId, username }) => ({
+        url: `groups/${groupId}/members/${username}/admin`,
+        method: 'PATCH',
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response.data;
+      }
     })
+
   }),
 });
 
-export const { useGetUserGroupsQuery, useGetCompleteGroupsSummaryQuery, useGetIndividualGroupDetailsQuery, useGetIndividualGroupTransactionsQuery } = groupsApi;
+export const { useGetUserGroupsQuery, useGetCompleteGroupsSummaryQuery, useGetIndividualGroupDetailsQuery, useGetIndividualGroupTransactionsQuery, useToggleAdminStatusMutation } = groupsApi;

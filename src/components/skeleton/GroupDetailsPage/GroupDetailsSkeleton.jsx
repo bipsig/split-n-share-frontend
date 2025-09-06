@@ -36,7 +36,8 @@ import {
   Share,
   Share2Icon,
   IndianRupee,
-  ReceiptIndianRupee
+  ReceiptIndianRupee,
+  Wallet2
 } from 'lucide-react';
 
 // Skeleton loading component
@@ -54,7 +55,7 @@ const GroupDetailPageSkeleton = () => {
 
   return (
     <div className="w-full min-h-screen space-y-4 sm:space-y-6 bg-gradient-to-br from-gray-50 via-gray-100 to-slate-100 p-3 sm:p-6">
-      
+
       {/* Header Section Skeleton */}
       <div className="flex flex-col gap-4 p-4 sm:p-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
         <div className="flex items-start gap-3 sm:gap-4">
@@ -107,15 +108,16 @@ const GroupDetailPageSkeleton = () => {
         <div className="flex border-b border-gray-200/50 overflow-x-auto scrollbar-hide">
           {[
             { id: 'transactions', label: 'Transactions', icon: Receipt },
-            { id: 'balances', label: 'Balances', icon: Coins },
+            { id: 'balances', label: 'My Balances', icon: Wallet2 },
+            { id: 'group-balances', label: 'All Balances', icon: Coins },
             { id: 'members', label: 'Members', icon: Users }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-3 sm:py-4 font-medium transition-all duration-200 whitespace-nowrap text-sm sm:text-base ${activeTab === tab.id
-                  ? 'text-blue-600 bg-blue-50/50 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50/50'
+                ? 'text-blue-600 bg-blue-50/50 border-b-2 border-blue-600'
+                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50/50'
                 }`}
             >
               <tab.icon size={16} className="sm:w-[18px] sm:h-[18px]" />
@@ -151,13 +153,13 @@ const GroupDetailPageSkeleton = () => {
                             <Skeleton className="h-6 w-16 rounded-full" />
                             <Skeleton className="h-6 w-14 rounded-full" />
                           </div>
-                          
+
                           {/* Paid by */}
                           <Skeleton className="h-4 w-32 rounded" />
-                          
+
                           {/* Note */}
                           <Skeleton className="h-4 w-56 sm:w-72 rounded" />
-                          
+
                           {/* Users involved */}
                           <div className="flex items-center gap-2 mb-2">
                             <Skeleton className="h-3 w-20 rounded" />
@@ -167,7 +169,7 @@ const GroupDetailPageSkeleton = () => {
                               ))}
                             </div>
                           </div>
-                          
+
                           {/* Metadata */}
                           <div className="flex flex-wrap gap-3 sm:gap-4">
                             <Skeleton className="h-3 w-16 rounded" />
@@ -192,7 +194,7 @@ const GroupDetailPageSkeleton = () => {
             </div>
           )}
 
-          {activeTab === 'balances' && (
+          {(activeTab === 'balances' || activeTab === 'group-balances') && (
             <div className="space-y-4">
               <div className="text-center mb-4 sm:mb-6">
                 <Skeleton className="h-6 sm:h-7 w-48 mx-auto mb-2 rounded" />
@@ -209,7 +211,7 @@ const GroupDetailPageSkeleton = () => {
                         <Skeleton className="h-4 w-20 sm:w-24 rounded" />
                       </div>
                     </div>
-                    
+
                     <div className="text-right flex-shrink-0">
                       <Skeleton className="h-8 sm:h-9 w-24 sm:w-28 rounded mb-2" />
                       <Skeleton className="h-7 sm:h-8 w-20 sm:w-24 rounded" />
@@ -235,7 +237,7 @@ const GroupDetailPageSkeleton = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                       <Skeleton className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex-shrink-0" />
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
                           <Skeleton className="h-5 w-24 sm:w-32 rounded" />

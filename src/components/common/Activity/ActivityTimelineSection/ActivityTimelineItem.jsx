@@ -11,7 +11,6 @@ import useUser from '../../../../hooks/useUser';
 
 const ActivityTimelineItem = ({ activity, getActivityColor, getActivityIcon, getActivityBgColor, getActivityTitle, getActivityDescription }) => {
   const { username: currentUsername } = useUser();
-  console.log (activity)
   return (
     <div
       key={activity.id}

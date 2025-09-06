@@ -4,7 +4,6 @@ import { Home } from 'lucide-react' // Assuming you're using lucide-react
 const ActivityTimelineParticipants = ({ activity, userData }) => {
   // Get participants from recipients array
   const participants = userData || [];
-  console.log ('In Participants', participants)
 
   if (participants.length === 0) {
     return null;

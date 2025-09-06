@@ -95,7 +95,6 @@ const UserProfile = () => {
 
   // Password change handler
   const handlePasswordChange = async () => {
-    // console.log (passwordData);
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error('Passwords do not match');
@@ -111,7 +110,6 @@ const UserProfile = () => {
       // Simulate API call - replace with your actual password change API
       // await new Promise(resolve => setTimeout(resolve, 1000));
       const result = await updateUserPassword(requestBody).unwrap();
-      console.log (result);
       
       setIsChangingPassword(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
