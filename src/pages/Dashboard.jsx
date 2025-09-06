@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { HandCoins, Home, Loader2, Users, Plus, TrendingUp, Activity, CreditCard, Bell } from 'lucide-react'
 import { useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery } from '../redux/slices/api/usersApi';
 import { parseTime } from '../utils/parseTime';
@@ -15,11 +15,14 @@ import EmptyState from '../components/common/PageOverview/EmptyState';
 import StatsCard from '../components/common/PageOverview/StatsCard';
 import RecentActivitySection from '../components/common/Dashboard/RecentActivitySection';
 import BottomSectionGrid from '../components/common/Dashboard/BottomSectionGrid';
+import Modal from '../components/modals/Modal';
 
 const Dashboard = () => {
   const { data: financialData, isLoading: isFinancialLoading, isError: isFinancialError } = useGetFinancialSummaryQuery();
   const { data: groupsData, isLoading: isGroupsLoading, isError: isGroupsError } = useGetGroupsSummaryQuery();
   const { data: recentTransactions, isLoading: isTransactionsLoading, isError: isTransactionsError } = useGetRecentTransactionsQuery();
+
+  const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
 
   const safeFinancialData = financialData || {
     balance: 0,
@@ -42,6 +45,7 @@ const Dashboard = () => {
         <HeaderButton
           variant='primary'
           icon={Plus}
+          onClick={() => setShowAddExpenseModal(true)}
         >
           Add Expense
         </HeaderButton>
@@ -150,6 +154,15 @@ const Dashboard = () => {
         groupsData={groupsData}
         isGroupsLoading={isGroupsLoading}
       />
+
+      <Modal
+        isOpen={showAddExpenseModal}
+        onClose={() => setShowAddExpenseModal(false)}
+        title="Add Expense"
+        subtitle="Add Expense Subtitle" 
+      >
+
+      </Modal>
     </PageLayout>
   );
 };

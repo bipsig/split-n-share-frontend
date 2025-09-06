@@ -9,6 +9,14 @@ const variantClasses = {
   warning: "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-xl hover:from-yellow-600 hover:to-yellow-700"
 }
 
+const disabledVariantClasses = {
+  primary: "bg-gray-400 text-gray-200 rounded-xl cursor-not-allowed",
+  success: "bg-gray-400 text-gray-200 rounded-xl cursor-not-allowed",
+  secondary: "bg-gray-100 text-gray-400 rounded-xl cursor-not-allowed border border-gray-200",
+  danger: "bg-gray-400 text-gray-200 rounded-xl cursor-not-allowed",
+  warning: "bg-gray-400 text-gray-200 rounded-xl cursor-not-allowed"
+}
+
 const sizeClasses = {
   sm: "px-3 py-2 text-sm",
   md: "px-4 py-2.5",
@@ -27,15 +35,20 @@ const HeaderButton = ({
   className = '',
   hideTextOnMobile = true
 }) => {
-  const baseClasses = "flex items-center gap-2 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:shadow-lg";
-
-  const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`
+  const baseClasses = "flex items-center gap-2 font-medium transition-all duration-200";
+  const enabledClasses = "shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer";
+  const disabledClasses = "shadow-sm";
+  
+  const stateClasses = disabled || loading ? disabledClasses : enabledClasses;
+  const colorClasses = disabled ? disabledVariantClasses[variant] : variantClasses[variant];
+  
+  const combinedClasses = `${baseClasses} ${stateClasses} ${sizeClasses[size]} ${colorClasses} ${className}`;
 
   return (
     <button
       className={combinedClasses}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
       {loading ? (
         <Loader2 size={iconSize} className="animate-spin" />
