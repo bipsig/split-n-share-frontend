@@ -7,6 +7,7 @@ import FormInputIconSelect from '../FormComponents/FormInputIconSelect';
 import { useCreateGroupMutation } from '../../../../redux/slices/api/groupsApi';
 import toast from 'react-hot-toast';
 import { useOutletContext } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 
 const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
@@ -51,6 +52,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
       console.log(result);
 
       if (result.success) {
+        setIsNewGroupModalOpen(false);
         toast.success('New Group Created Successfully');
 
         refetchFunction();
@@ -63,6 +65,8 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
     }
   }
 
+  const isFormValid = newGroupDataForm.name && newGroupDataForm.currency && newGroupDataForm.category && newGroupDataForm.selectedIcon;
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -74,6 +78,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
           formObject={newGroupDataForm}
           formObjectAttribute={'name'}
           handleChangeFunction={handleInputChange}
+          disabled={isLoading}
         />
 
         {/* Description */}
@@ -85,6 +90,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
           formObjectAttribute={'description'}
           rowSize={3}
           handleChangeFunction={handleInputChange}
+          disabled={isLoading}
         />
 
         {/* Currency */}
@@ -95,6 +101,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
           formObjectAttribute={'currency'}
           handleChangeFunction={handleInputChange}
           options={currencyOptions}
+          disabled={isLoading}
         />
 
         {/* Category */}
@@ -105,6 +112,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
           formObjectAttribute={'category'}
           handleChangeFunction={handleInputChange}
           options={categoryOptions}
+          disabled={isLoading}
         />
 
         {/* Icon Selection */}
@@ -115,6 +123,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
           formObjectAttribute={'selectedIcon'}
           handleChangeFunction={handleInputChange}
           options={iconOptionsData}
+          disabled={isLoading}
         />
       </div>
 
@@ -123,17 +132,25 @@ const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
         <button
           type="button"
           onClick={() => setIsNewGroupModalOpen(false)}
-          className="px-6 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200"
+          disabled={isLoading}
+          className="px-6 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancel
         </button>
         <button
           type="button"
           onClick={handleCreateGroup}
-          disabled={!newGroupDataForm.name || !newGroupDataForm.currency || !newGroupDataForm.category || !newGroupDataForm.selectedIcon}
-          className="flex items-center justify-center px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
+          disabled={!isFormValid || isLoading}
+          className="flex items-center justify-center px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 min-w-[120px]"
         >
-          Create Group
+          {isLoading ? (
+            <>
+              <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+              Creating...
+            </>
+          ) : (
+            'Create Group'
+          )}
         </button>
       </div>
     </div>
