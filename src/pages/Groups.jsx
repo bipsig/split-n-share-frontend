@@ -25,7 +25,7 @@ import Modal from '../components/modals/Modal';
 import NewGroupForm from '../components/ui/Forms/NewGroupForm/CreateNewGroupForm';
 
 const Groups = () => {
-  const { data, isLoading: isGroupsDataLoading, isError: isGroupsDataError } = useGetCompleteGroupsSummaryQuery();
+  const { data, isLoading: isGroupsDataLoading, isError: isGroupsDataError, refetch } = useGetCompleteGroupsSummaryQuery();
   const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -170,11 +170,11 @@ const Groups = () => {
       {isNewGroupModalOpen && (
         <Modal
           isOpen={isNewGroupModalOpen}
-          onClose={() => setIsGroupModalOpen(false)}
+          onClose={() => setIsNewGroupModalOpen(false)}
           title={"Create a Group"}
           subtitle={"Create a Group Subtitle"}
         >
-          <NewGroupForm setIsNewGroupModalOpen={setIsNewGroupModalOpen} />
+          <NewGroupForm setIsNewGroupModalOpen={setIsNewGroupModalOpen} refetchFunction={refetch} />
         </Modal>
       )}
 

@@ -40,7 +40,7 @@ const UserSidebar = () => {
   const mainContentRef = useRef(null);
 
   // API hooks
-  const { data: groups, isLoading, isError } = useGetUserGroupsQuery();
+  const { data: groups, isLoading, isError, refetch: sidebarGroupsRefetch } = useGetUserGroupsQuery();
   const { data: userInfo, isLoading: isUserLoading } = useGetUserDetailsQuery();
   const [logout] = useLogoutMutation();
   
@@ -260,7 +260,7 @@ const UserSidebar = () => {
         className="flex-1 h-screen overflow-y-auto bg-gray-50 pt-16 lg:pt-0"
       >
         <div className="p-4 lg:p-6">
-          <Outlet />
+          <Outlet context={{ sidebarGroupsRefetch }}/>
         </div>
       </main>
 

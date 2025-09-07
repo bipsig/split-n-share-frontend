@@ -6,10 +6,12 @@ import FormInputSelect from '../FormComponents/FormInputSelect';
 import FormInputIconSelect from '../FormComponents/FormInputIconSelect';
 import { useCreateGroupMutation } from '../../../../redux/slices/api/groupsApi';
 import toast from 'react-hot-toast';
+import { useOutletContext } from 'react-router-dom';
 
 
-const NewGroupForm = ({ setIsNewGroupModalOpen }) => {
+const NewGroupForm = ({ setIsNewGroupModalOpen, refetchFunction }) => {
   const [createGroup, { isLoading, isError, error, isSuccess, data }] = useCreateGroupMutation();
+  const { sidebarGroupsRefetch } = useOutletContext();
 
   const [newGroupDataForm, setNewGroupDataForm] = useState({
     name: "",
@@ -46,11 +48,13 @@ const NewGroupForm = ({ setIsNewGroupModalOpen }) => {
   const handleCreateGroup = async () => {
     try {
       const result = await createGroup(newGroupDataForm).unwrap();
-      console.log (result);
+      console.log(result);
 
       if (result.success) {
-        setIsNewGroupModalOpen(false);
         toast.success('New Group Created Successfully');
+
+        refetchFunction();
+        sidebarGroupsRefetch();
       }
     }
     catch (err) {
@@ -118,7 +122,7 @@ const NewGroupForm = ({ setIsNewGroupModalOpen }) => {
       <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
         <button
           type="button"
-          onClick={() => setIsGroupModalOpen(false)}
+          onClick={() => setIsNewGroupModalOpen(false)}
           className="px-6 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200"
         >
           Cancel
