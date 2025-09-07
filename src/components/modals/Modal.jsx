@@ -116,7 +116,7 @@ const Modal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
@@ -129,7 +129,7 @@ const Modal = ({
       {/* Modal */}
       <div 
         className={`
-          relative w-full ${sizeClass} transform transition-all duration-300
+          relative w-full ${sizeClass} transform transition-all duration-300 my-8
           ${className}
         `}
         style={{
@@ -139,16 +139,16 @@ const Modal = ({
         {/* Glass Card Container */}
         <div className={`
           bg-gradient-to-br ${theme.bg} backdrop-blur-md rounded-2xl shadow-2xl 
-          border ${theme.border} relative overflow-hidden max-h-[90vh] flex flex-col
+          border ${theme.border} relative overflow-hidden max-h-[calc(100vh-4rem)] flex flex-col
         `}>
           {/* Gradient Overlay */}
           <div className={`absolute inset-0 bg-gradient-to-br ${theme.overlay} rounded-2xl`} />
           
           {/* Content */}
-          <div className="relative z-10 flex flex-col max-h-full">
-            {/* Header */}
+          <div className="relative z-10 flex flex-col min-h-0">
+            {/* Header - Fixed */}
             {(title || showCloseButton || IconComponent) && (
-              <div className="flex items-start justify-between p-6 pb-4 flex-shrink-0">
+              <div className="flex items-start justify-between p-6 pb-4 flex-shrink-0 border-b border-gray-200/20">
                 <div className="flex items-start gap-4 flex-1 min-w-0">
                   {/* Icon */}
                   {IconComponent && (
@@ -195,9 +195,9 @@ const Modal = ({
               </div>
             )}
 
-            {/* Body */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
-              <div className="p-6 pt-2">
+            {/* Body - Scrollable */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">
+              <div className="p-4 sm:p-6">
                 {children}
               </div>
             </div>

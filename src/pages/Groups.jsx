@@ -21,9 +21,12 @@ import EmptyGroupsLists from '../components/common/Groups/EmptyGroupsLists';
 import GroupListCard from '../components/common/Groups/GroupListCard';
 import SearchBar from '../components/common/SearchBar/SearchBar';
 import FilterSelect from '../components/common/FilterSelect/FilterSelect';
+import Modal from '../components/modals/Modal';
+import NewGroupForm from '../components/ui/Forms/NewGroupForm/CreateNewGroupForm';
 
 const Groups = () => {
   const { data, isLoading: isGroupsDataLoading, isError: isGroupsDataError } = useGetCompleteGroupsSummaryQuery();
+  const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
@@ -32,18 +35,18 @@ const Groups = () => {
   const groupsData = data ? data.groupsSummary : [];
 
   const categoryOptions = [
-    { id: 1, value: 'all', title: 'All Categories'},
-    { id: 2, value: 'Home', title: 'Home'},
-    { id: 3, value: 'Trip', title: 'Trip'},
-    { id: 4, value: 'Office', title: 'Office'},
-    { id: 5, value: 'Friends', title: 'Friends'},
-    { id: 6, value: 'Other', title: 'Other'},
+    { id: 1, value: 'all', title: 'All Categories' },
+    { id: 2, value: 'Home', title: 'Home' },
+    { id: 3, value: 'Trip', title: 'Trip' },
+    { id: 4, value: 'Office', title: 'Office' },
+    { id: 5, value: 'Friends', title: 'Friends' },
+    { id: 6, value: 'Other', title: 'Other' },
   ]
 
-    const statusOptions = [
-    {id: 1, value: 'all', title: 'All Status'},
-    {id: 2, value: 'active', title: 'Active'},
-    {id: 3, value: 'inactive', title: 'Inactive'}
+  const statusOptions = [
+    { id: 1, value: 'all', title: 'All Status' },
+    { id: 2, value: 'active', title: 'Active' },
+    { id: 3, value: 'inactive', title: 'Inactive' }
   ];
 
   const filteredGroups = groupsData.filter(group => {
@@ -64,7 +67,11 @@ const Groups = () => {
         heading="Your Groups"
         subtitle="Manage your expense groups and track spending"
       >
-        <HeaderButton variant='primary' icon={Plus}>
+        <HeaderButton
+          variant='primary'
+          icon={Plus}
+          onClick={() => setIsNewGroupModalOpen(true)}
+        >
           New Group
         </HeaderButton>
         <HeaderButton variant='secondary' icon={Settings}>
@@ -79,21 +86,21 @@ const Groups = () => {
         <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20">
           <div className="flex flex-col lg:flex-row gap-4 items-center">
             {/* Search Bar */}
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search groups..."/>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search groups..." />
 
             {/* Filters */}
-            
+
             <div className="flex gap-3 w-full lg:w-auto">
               <FilterSelect
                 filterType={filterCategory}
                 setFilterType={setFilterCategory}
-                options={categoryOptions} 
+                options={categoryOptions}
               />
 
               <FilterSelect
-              filterType={filterStatus}
-              setFilterType={setFilterStatus}
-              options={statusOptions} 
+                filterType={filterStatus}
+                setFilterType={setFilterStatus}
+                options={statusOptions}
               />
             </div>
           </div>
@@ -151,13 +158,24 @@ const Groups = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredGroups.map((group) => (
-                <GroupListCard 
+                <GroupListCard
                   group={group}
                 />
               ))}
             </div>
           )}
         </GroupsListSection>
+      )}
+
+      {isNewGroupModalOpen && (
+        <Modal
+          isOpen={isNewGroupModalOpen}
+          onClose={() => setIsGroupModalOpen(false)}
+          title={"Create a Group"}
+          subtitle={"Create a Group Subtitle"}
+        >
+          <NewGroupForm setIsNewGroupModalOpen={setIsNewGroupModalOpen} />
+        </Modal>
       )}
 
       <style jsx>{`

@@ -11,7 +11,7 @@ export const groupsApi = apiSlice.injectEndpoints({
           throw new Error(response.message);
         }
         return response.data;
-      }
+      },
     }),
     getCompleteGroupsSummary: builder.query({
       query: () => ({
@@ -22,7 +22,7 @@ export const groupsApi = apiSlice.injectEndpoints({
           throw new Error(response.message);
         }
         return response.data;
-      }
+      },
     }),
     getIndividualGroupDetails: builder.query({
       query: (groupId) => ({
@@ -33,7 +33,7 @@ export const groupsApi = apiSlice.injectEndpoints({
           throw new Error(response.message);
         }
         return response.data;
-      }
+      },
     }),
     getIndividualGroupTransactions: builder.query({
       query: (groupId) => ({
@@ -44,7 +44,20 @@ export const groupsApi = apiSlice.injectEndpoints({
           throw new Error(response.message);
         }
         return response.data;
-      }
+      },
+    }),
+    createGroup: builder.mutation({
+      query: (groupData) => ({
+        url: 'groups',
+        method: 'POST',
+        body: groupData,
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response;
+      },
     }),
     toggleAdminStatus: builder.mutation({
       query: ({ groupId, username }) => ({
@@ -55,11 +68,17 @@ export const groupsApi = apiSlice.injectEndpoints({
         if (!response.success) {
           throw new Error(response.message);
         }
-        return response.data;
-      }
+        return response;
+      },
     })
-
   }),
 });
 
-export const { useGetUserGroupsQuery, useGetCompleteGroupsSummaryQuery, useGetIndividualGroupDetailsQuery, useGetIndividualGroupTransactionsQuery, useToggleAdminStatusMutation } = groupsApi;
+export const { 
+  useGetUserGroupsQuery, 
+  useGetCompleteGroupsSummaryQuery, 
+  useGetIndividualGroupDetailsQuery, 
+  useGetIndividualGroupTransactionsQuery, 
+  useCreateGroupMutation,
+  useToggleAdminStatusMutation 
+} = groupsApi;
