@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 // import { loginUser } from '../redux/slices/auth/authThunks';
 // import useAuth from '../hooks/useAuth';
@@ -13,9 +13,21 @@ const Login = () => {
 
   const username = useRef();
   const password = useRef();
+  const rememberMe = useRef();
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("rememberedUsername");
+
+    if (savedUsername && username.current) {
+      username.current.value = savedUsername;
+      rememberMe.current.checked = true;
+    }
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    const toRemember = rememberMe.current.checked;
 
     const credentials = {
       username: username.current.value,
@@ -26,7 +38,15 @@ const Login = () => {
       const result = await login(credentials).unwrap();
 
       if (result.success) {
+        if (toRemember) {
+          localStorage.setItem("rememberedUsername", credentials.username);
+        }
+        else {
+          localStorage.removeItem("rememberedUsername");
+        }
+
         navigate('/user/dashboard')
+
         toast.success('Logged in successfully!');
       }
     } 
@@ -58,6 +78,13 @@ const Login = () => {
               ref={password}
               required
             />
+          </div>
+          <div>
+            <input 
+              type="checkbox"
+              ref={rememberMe} 
+            />
+            <label> Remember Me</label>
           </div>
           <button
             type="submit"
