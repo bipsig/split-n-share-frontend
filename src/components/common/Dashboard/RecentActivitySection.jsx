@@ -1,8 +1,11 @@
 import React from 'react';
 import { Activity, Loader2 } from 'lucide-react';
 import TransactionItem from './TransactionItem';
+import { useNavigate } from 'react-router-dom';
 
 const RecentActivitySection = ({ transactions, isLoading }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-gradient-to-br from-white via-white to-gray-50 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 rounded-2xl"></div>
@@ -17,7 +20,12 @@ const RecentActivitySection = ({ transactions, isLoading }) => {
               <p className="text-sm text-gray-600">Your latest transactions and updates</p>
             </div>
           </div>
-          <button className="text-sm text-blue-600 hover:text-blue-800 font-medium px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all duration-200">
+          <button 
+            className="text-sm text-blue-600 hover:text-blue-800 font-medium px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all duration-200 cursor-pointer"
+            onClick={() => {
+              navigate('/user/all');
+            }}
+          >
             View All →
           </button>
         </div>
@@ -39,7 +47,7 @@ const RecentActivitySection = ({ transactions, isLoading }) => {
                 </div>
               ) : (
                 <>
-                  {transactions?.data?.map((transaction, index) => (
+                  {transactions?.data?.slice(0,5).map((transaction, index) => (
                     <TransactionItem 
                       key={index}
                       transaction={transaction}
