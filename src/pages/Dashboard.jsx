@@ -16,13 +16,14 @@ import StatsCard from '../components/common/PageOverview/StatsCard';
 import RecentActivitySection from '../components/common/Dashboard/RecentActivitySection';
 import BottomSectionGrid from '../components/common/Dashboard/BottomSectionGrid';
 import Modal from '../components/modals/Modal';
+import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
 
 const Dashboard = () => {
-  const { data: financialData, isLoading: isFinancialLoading, isError: isFinancialError } = useGetFinancialSummaryQuery();
-  const { data: groupsData, isLoading: isGroupsLoading, isError: isGroupsError } = useGetGroupsSummaryQuery();
-  const { data: recentTransactions, isLoading: isTransactionsLoading, isError: isTransactionsError } = useGetRecentTransactionsQuery();
+  const { data: financialData, isLoading: isFinancialLoading, isError: isFinancialError, refetch: refetchFinancialData } = useGetFinancialSummaryQuery();
+  const { data: groupsData, isLoading: isGroupsLoading, isError: isGroupsError, refetch: refetchGroupsData } = useGetGroupsSummaryQuery();
+  const { data: recentTransactions, isLoading: isTransactionsLoading, isError: isTransactionsError, refetch: refetchRecentTransactions } = useGetRecentTransactionsQuery();
 
-  const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
+  const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
 
   const safeFinancialData = financialData || {
     balance: 0,
@@ -36,6 +37,19 @@ const Dashboard = () => {
   const youGetBack = safeFinancialData.youGetBack || 0;
   const youPay = safeFinancialData.youPay || 0;
 
+  const refetchAllData = async () => {
+    try {
+      await Promise.all([
+        refetchFinancialData(),
+        refetchGroupsData(),
+        refetchRecentTransactions()
+      ]);
+    }
+    catch (err) {
+      console.error('Error refetching dashboard data:', err);
+    }
+  }
+
   return (
     <PageLayout>
       <PageHeaderSection
@@ -45,7 +59,7 @@ const Dashboard = () => {
         <HeaderButton
           variant='primary'
           icon={Plus}
-          onClick={() => setShowAddExpenseModal(true)}
+          onClick={() => setIsAddExpenseModalOpen(true)}
         >
           Add Expense
         </HeaderButton>
@@ -156,12 +170,15 @@ const Dashboard = () => {
       />
 
       <Modal
-        isOpen={showAddExpenseModal}
-        onClose={() => setShowAddExpenseModal(false)}
+        isOpen={isAddExpenseModalOpen}
+        onClose={() => setIsAddExpenseModalOpen(false)}
         title="Add Expense"
         subtitle="Add Expense Subtitle" 
       >
-
+        <AddExpenseForm
+          setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
+          refetchDashboardData={refetchAllData} 
+        />
       </Modal>
     </PageLayout>
   );

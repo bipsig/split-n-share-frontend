@@ -29,7 +29,7 @@ const GroupItem = ({ group, index }) => {
         </div>
         <div className="text-right">
           <p className={`font-bold ${group.groupBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {group.groupBalance > 0 ? '+' : '-'}{parseAmount(Math.abs(group.groupBalance))}
+            {group.groupBalance >= 0 ? '+' : '-'}{parseAmount(Math.abs(group.groupBalance))}
           </p>
         </div>
       </div>
