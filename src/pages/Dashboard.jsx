@@ -177,7 +177,8 @@ const Dashboard = () => {
       >
         <AddExpenseForm
           setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
-          refetchDashboardData={refetchAllData} 
+          // refetchDashboardData={refetchAllData}
+          refecthAPIFunction={refetchAllData} 
         />
       </Modal>
     </PageLayout>

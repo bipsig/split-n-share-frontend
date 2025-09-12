@@ -31,17 +31,21 @@ import { useParams } from 'react-router-dom';
 import GroupDetailPageSkeleton from '../components/skeleton/GroupDetailsPage/GroupDetailsSkeleton';
 import MyBalancesTab from '../components/GroupPage/MyBalances/MyBalancesTab';
 import useUser from '../hooks/useUser';
+import Modal from '../components/modals/Modal';
+import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
 
+  const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
+
   const { username: currentUsername } = useUser();
 
   const { id } = useParams();
-  const { data: group, isLoading: isGroupLoading, isError: isGroupError } = useGetIndividualGroupDetailsQuery(id);
-  const { data: transactions, isLoading: isTransactionsLoading, isError: isTransactionsError} = useGetIndividualGroupTransactionsQuery(id);
+  const { data: group, isLoading: isGroupLoading, isError: isGroupError, refetch: refetchGroupData } = useGetIndividualGroupDetailsQuery(id);
+  const { data: transactions, isLoading: isTransactionsLoading, isError: isTransactionsError, refetch: refetchTransactionsData } = useGetIndividualGroupTransactionsQuery(id);
 
   const groupData = group ? group.groupData : {};
   const transactionsData = transactions ? transactions.transactionsData : [];
@@ -59,6 +63,18 @@ const GroupPage = () => {
     { id: 2, value: 'expense', title: 'Expenses' },
     { id: 3, value: 'payment', title: 'Payments' }
   ];
+
+  const refetchAllData = async () => {
+    try {
+      await Promise.all([
+        refetchGroupData(),
+        refetchTransactionsData()
+      ]);
+    }
+    catch (err) {
+      console.error('Error refetching dashboard data:', err);
+    }
+  }
 
   const filteredTransactions = transactionsData.filter(transaction => {
     const matchesSearch = transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -102,13 +118,16 @@ const GroupPage = () => {
               )}
             </div>
             <p className="text-sm text-gray-600 mb-1 break-words">{groupData.description}</p>
-            <p className="text-xs text-gray-500 break-words">Created {parseTime(groupData.createdAt)} • {getActiveMembers()} members</p>
+            <p className="text-xs text-gray-500 break-words">Created {parseTime(groupData.createdAt)} • {groupData.members.length} members</p>
           </div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <button className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
+          <button 
+            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base" 
+            onClick={() => setIsAddExpenseModalOpen(true)}
+          >
             <Plus size={16} sm:size={18} />
             <span>Add Expense</span>
           </button>
@@ -223,6 +242,19 @@ const GroupPage = () => {
           )}
         </div>
       </div>
+
+      <Modal
+        isOpen={isAddExpenseModalOpen}
+        onClose={() => setIsAddExpenseModalOpen(false)}
+        title={"Add Expense"}
+        subtitle={"Add Expense Subtitle"}
+      >
+        <AddExpenseForm
+          setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
+          refetchAPIFunction={refetchAllData}
+          defaultGroup={id}
+        />
+      </Modal>
 
       <style jsx>{`
         .scrollbar-hide {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FormInputField from '../FormComponents/FormInputField';
 import { Loader2 } from 'lucide-react';
 import { useGetCompleteGroupsSummaryQuery, useGetUserGroupsQuery } from '../../../../redux/slices/api/groupsApi';
@@ -7,7 +7,7 @@ import FormInputUsersInvolved from '../FormComponents/FormInputUsersInvolved';
 import { useAddExpenseMutation } from '../../../../redux/slices/api/transactionsApi';
 import toast from 'react-hot-toast';
 
-const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData }) => {
+const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetchAPIFunction, defaultGroup }) => {
   const { data: groupsData, isLoading: groupsLoading, isError: isGroupsError } = useGetCompleteGroupsSummaryQuery();
 
   const [addExpense, { isLoading: expenseAddLoading, isError: expenseAddIsError, error: expenseAddError, isSuccess: expsenseAddsSuccess, data: expenseAddData }] = useAddExpenseMutation();
@@ -19,12 +19,28 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData }) => {
   const [addExpenseDataForm, setAddExpenseDataForm] = useState({
     description: "",
     amount: null,
-    groupId: "",
+    groupId: defaultGroup || "",
     user_paid: "",
     users_involved: [],
     type: "Expense",
     note: ""
   });
+
+  useEffect(() => {
+    if (defaultGroup) {
+      const requiredGroup = groupsData?.groupsSummary?.find((group) => group.id === defaultGroup);
+      if (requiredGroup) {
+        setGroupMembers(requiredGroup.members.map((member) => {
+          return {
+            id: member.user,
+            value: member.username,
+            title: member.username,
+            role: member.role
+          }
+        }));
+      }
+    }
+  }, [defaultGroup, groupsData] )
 
   const userGroups = groupsData?.groupsSummary?.map((group) => {
     return {
@@ -66,8 +82,8 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData }) => {
         setIsAddExpenseModalOpen(false);
         toast.success('New Expense Added Successfully');
 
-        if (refetchDashboardData) {
-          refetchDashboardData();
+        if (refetchAPIFunction) {
+          refetchAPIFunction();
         }
       }
     }
