@@ -21,6 +21,8 @@ import useUser from '../hooks/useUser';
 import EmptyTransactionList from '../components/common/AllExpenses/TransactionList/EmptyTransactionList';
 import TransactionListItem from '../components/common/AllExpenses/TransactionList/TransactionListItem';
 import QuickStatsSection from '../components/common/AllExpenses/QuickStatsSection';
+import Modal from '../components/modals/Modal';
+import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
 
 const Expenses = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,33 +30,46 @@ const Expenses = () => {
   const [filterCategory, setFilterCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
 
   const { username: currentUsername } = useUser();
 
-  const { data: transactions, isLoading: isTransactionsLoading, isError: isTransactionsError } = useGetUserTransactionDetailsQuery();
+  const { data: transactions, isLoading: isTransactionsLoading, isError: isTransactionsError, refetch: refetchTransactions } = useGetUserTransactionDetailsQuery();
 
   const transactionsData = transactions ? transactions.transactionsData : [];
 
+  const refetchAllData = async () => {
+    console.log ("Refething all data");
+    try {
+      await Promise.all([
+        refetchTransactions()
+      ]);
+    }
+    catch (err) {
+      console.error('Error refetching dashboard data:', err);
+    }
+  }
+
   const transactionTypeOptions = [
-    {id: 1, value: 'all', title: 'All Types'},
-    {id: 2, value: 'expense', title: 'Expenses'},
-    {id: 3, value: 'payment', title: 'Payments'}
+    { id: 1, value: 'all', title: 'All Types' },
+    { id: 2, value: 'expense', title: 'Expenses' },
+    { id: 3, value: 'payment', title: 'Payments' }
   ];
 
   const categoryTypeOptions = [
-    { id: 1, value: 'all', title: 'All Categories'},
-    { id: 2, value: 'Home', title: 'Home'},
-    { id: 3, value: 'Trip', title: 'Trip'},
-    { id: 4, value: 'Office', title: 'Office'},
-    { id: 5, value: 'Friends', title: 'Friends'},
-    { id: 6, value: 'Other', title: 'Other'},
+    { id: 1, value: 'all', title: 'All Categories' },
+    { id: 2, value: 'Home', title: 'Home' },
+    { id: 3, value: 'Trip', title: 'Trip' },
+    { id: 4, value: 'Office', title: 'Office' },
+    { id: 5, value: 'Friends', title: 'Friends' },
+    { id: 6, value: 'Other', title: 'Other' },
   ]
 
   const sortingOptions = [
-    { id: 1, value: 'newest', title: 'Newest First'},
-    { id: 2, value: 'oldest', title: 'Oldest First'},
-    { id: 3, value: 'amount-high', title: 'Amount: High to Low'},
-    { id: 4, value: 'amount-low', title: 'Amount: Low to High'},
+    { id: 1, value: 'newest', title: 'Newest First' },
+    { id: 2, value: 'oldest', title: 'Oldest First' },
+    { id: 3, value: 'amount-high', title: 'Amount: High to Low' },
+    { id: 4, value: 'amount-low', title: 'Amount: Low to High' },
   ]
 
   const categories = ['all', 'Home', 'Trip', 'Office', 'Friends', 'Other'];
@@ -96,8 +111,8 @@ const Expenses = () => {
   }
 
   if (isTransactionsError) {
-      return <PageLayout><p className="text-red-500">Failed to load transactions data.</p></PageLayout>;
-    }
+    return <PageLayout><p className="text-red-500">Failed to load transactions data.</p></PageLayout>;
+  }
 
   return (
     <PageLayout>
@@ -106,7 +121,7 @@ const Expenses = () => {
         heading="All Expenses"
         subtitle="Track all your transactions across groups"
       >
-        <HeaderButton variant='primary' icon={Plus}>
+        <HeaderButton variant='primary' icon={Plus} onClick={() => setIsAddExpenseModalOpen(true)}>
           Add Expense
         </HeaderButton>
       </PageHeaderSection>
@@ -155,7 +170,7 @@ const Expenses = () => {
               <FilterSelect
                 filterType={filterType}
                 setFilterType={setFilterType}
-                options={transactionTypeOptions} 
+                options={transactionTypeOptions}
               />
 
               <FilterSelect
@@ -179,7 +194,7 @@ const Expenses = () => {
       {/* Transactions List */}
       <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden">
         <div className="p-4 lg:p-6 border-b border-gray-200/50">
-          <TransactionListHeader sortedTransactions={sortedTransactions}/>
+          <TransactionListHeader sortedTransactions={sortedTransactions} />
         </div>
 
         <div className="p-3 lg:p-6">
@@ -197,6 +212,18 @@ const Expenses = () => {
 
       {/* Quick Stats */}
       <QuickStatsSection sortedTransactions={sortedTransactions} transactionsData={transactionsData} totalExpenses={totalExpenses} totalPayments={totalPayments} />
+
+      <Modal
+        isOpen={isAddExpenseModalOpen}
+        onClose={() => setIsAddExpenseModalOpen(false)}
+        title="Add Expense"
+        subtitle="Add Expense Subtitle"
+      >
+        <AddExpenseForm
+          setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
+          refetchAPIFunction={refetchAllData}
+        />
+      </Modal>
 
       <style jsx>{`
         .scrollbar-hide {

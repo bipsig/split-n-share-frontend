@@ -24,6 +24,7 @@ const Dashboard = () => {
   const { data: recentTransactions, isLoading: isTransactionsLoading, isError: isTransactionsError, refetch: refetchRecentTransactions } = useGetRecentTransactionsQuery();
 
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
+  const [isSettleUpModalOpen, setIsSettleUpModalOpen] = useState(false);
 
   const safeFinancialData = financialData || {
     balance: 0,
@@ -67,6 +68,7 @@ const Dashboard = () => {
         <HeaderButton
           variant='secondary'
           icon={CreditCard}
+          onClick={() => setIsSettleUpModalOpen(true)}
         >
           Settle Up
         </HeaderButton>
@@ -180,6 +182,15 @@ const Dashboard = () => {
           // refetchDashboardData={refetchAllData}
           refecthAPIFunction={refetchAllData} 
         />
+      </Modal>
+
+      <Modal
+        isOpen={isSettleUpModalOpen}
+        onClose={() => setIsSettleUpModalOpen(false)}
+        title={"Settle Up"}
+        subtitle={"Settle Up Subtitle"}
+      >
+
       </Modal>
     </PageLayout>
   );
