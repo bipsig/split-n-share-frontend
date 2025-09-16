@@ -70,6 +70,19 @@ export const groupsApi = apiSlice.injectEndpoints({
         }
         return response;
       },
+    }),
+    addMembers: builder.mutation({
+      query: ({ groupId, newMembers }) => ({
+        url: `groups/${groupId}/members`,
+        method: 'POST',
+        body: { newMembers }
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response;
+      },
     })
   }),
 });
@@ -80,5 +93,6 @@ export const {
   useGetIndividualGroupDetailsQuery, 
   useGetIndividualGroupTransactionsQuery, 
   useCreateGroupMutation,
-  useToggleAdminStatusMutation 
+  useToggleAdminStatusMutation,
+  useAddMembersMutation
 } = groupsApi;

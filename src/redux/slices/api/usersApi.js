@@ -94,11 +94,23 @@ export const usersApi = apiSlice.injectEndpoints({
         if (!response.success) {
           throw new Error(response.message);
         }
-  
+
+        return response.data;
+      }
+    }),
+    searchUsers: builder.query({
+      query: ({ query }) => ({
+        url: `/users/search?query=${encodeURIComponent(query)}`,
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+
         return response.data;
       }
     })
   }),
 })
 
-export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation, useGetUserTransactionDetailsQuery, useGetUserRecentActivityQuery } = usersApi;
+export const { useGetUserDetailsQuery, useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation, useGetUserTransactionDetailsQuery, useGetUserRecentActivityQuery, useLazySearchUsersQuery } = usersApi;

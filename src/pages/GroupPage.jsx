@@ -8,7 +8,8 @@ import {
   CreditCard,
   Share2,
   IndianRupee,
-  ReceiptIndianRupee
+  ReceiptIndianRupee,
+  UserPlus
 } from 'lucide-react';
 import { getCategoryIcon } from '../utils/getCategoryIcon';
 import { getCategoryColor } from '../utils/getCategoryColor';
@@ -33,6 +34,8 @@ import MyBalancesTab from '../components/GroupPage/MyBalances/MyBalancesTab';
 import useUser from '../hooks/useUser';
 import Modal from '../components/modals/Modal';
 import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
+import HeaderButton from '../components/common/PageHeader/HeaderButton';
+import AddMembersToGroupForm from '../components/ui/Forms/AddMembersToGroupForm/AddMembersToGroupForm';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
@@ -40,6 +43,7 @@ const GroupPage = () => {
   const [filterType, setFilterType] = useState('all');
 
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
+  const [isAddMembersModalOpen, setIsAddMembersModalOpen] = useState(false);
 
   const { username: currentUsername } = useUser();
 
@@ -124,23 +128,37 @@ const GroupPage = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <button 
-            className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base" 
-            onClick={() => setIsAddExpenseModalOpen(true)}
+
+          <HeaderButton
+            variant='success'
+            icon={Plus}
+            onClick={setIsAddExpenseModalOpen}
           >
-            <Plus size={16} sm:size={18} />
-            <span>Add Expense</span>
-          </button>
+            Add Expense
+          </HeaderButton>
 
-          <button className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
-            <CreditCard size={16} sm:size={18} />
-            <span>Settle Up</span>
-          </button>
+          <HeaderButton
+            variant='primary'
+            icon={CreditCard}
+          >
+            Settle Up
+          </HeaderButton>
 
-          <button className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
-            <Share2 size={16} sm:size={18} />
-            <span>Export Data</span>
-          </button>
+          <HeaderButton
+            variant='warning'
+            icon={UserPlus}
+            onClick={setIsAddMembersModalOpen}
+          >
+            Add Member
+          </HeaderButton>
+          
+          <HeaderButton
+            variant='purple'
+            icon={Share2}
+          >
+            Export Data
+          </HeaderButton>
+
         </div>
       </div>
 
@@ -214,7 +232,7 @@ const GroupPage = () => {
           )}
 
           {activeTab === 'balances' && (
-            <MyBalancesTab user={currentUsername} transactionMatrix={groupData.transactionMatrix}/>
+            <MyBalancesTab user={currentUsername} transactionMatrix={groupData.transactionMatrix} />
           )}
 
           {activeTab === 'group-balances' && (
@@ -229,7 +247,7 @@ const GroupPage = () => {
 
           {activeTab === 'members' && (
             <div className="space-y-4">
-              <MemberListHeader />
+              <MemberListHeader handleMemberAddition={() => setIsAddMembersModalOpen(true)} />
 
               {groupData.members.map((member) => (
                 <MemberList member={member} isCurrentUserAdmin={isCurrentUserAdmin} />
@@ -253,6 +271,20 @@ const GroupPage = () => {
           setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
           refetchAPIFunction={refetchAllData}
           defaultGroup={id}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isAddMembersModalOpen}
+        onClose={() => setIsAddMembersModalOpen(false)}
+        title={"Add Members"}
+        subtitle={"Add Members Subtitle"}
+      >
+        <AddMembersToGroupForm 
+          groupId={id}
+          setIsAddMembersModalOpen={setIsAddMembersModalOpen}
+          existingMembers={groupData.members}
+          refetchAPIFunction={refetchAllData}
         />
       </Modal>
 
