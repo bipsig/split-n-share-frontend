@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { HandCoins, Home, Loader2, Users, Plus, TrendingUp, Activity, CreditCard, Bell } from 'lucide-react'
+import { HandCoins, Home, Loader2, Users, Plus, TrendingUp, Activity, CreditCard, Bell, Group } from 'lucide-react'
 import { useGetFinancialSummaryQuery, useGetGroupsSummaryQuery, useGetRecentTransactionsQuery } from '../redux/slices/api/usersApi';
 import { parseTime } from '../utils/parseTime';
 import { parseGroupMembers } from '../utils/parseGroupMembers';
@@ -17,6 +17,7 @@ import RecentActivitySection from '../components/common/Dashboard/RecentActivity
 import BottomSectionGrid from '../components/common/Dashboard/BottomSectionGrid';
 import Modal from '../components/modals/Modal';
 import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
+import NewGroupForm from '../components/ui/Forms/NewGroupForm/CreateNewGroupForm';
 
 const Dashboard = () => {
   const { data: financialData, isLoading: isFinancialLoading, isError: isFinancialError, refetch: refetchFinancialData } = useGetFinancialSummaryQuery();
@@ -24,7 +25,7 @@ const Dashboard = () => {
   const { data: recentTransactions, isLoading: isTransactionsLoading, isError: isTransactionsError, refetch: refetchRecentTransactions } = useGetRecentTransactionsQuery();
 
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
-  const [isSettleUpModalOpen, setIsSettleUpModalOpen] = useState(false);
+  const [isNewGroupModalOpen, setIsNewGroupModalOpen] = useState(false);
 
   const safeFinancialData = financialData || {
     balance: 0,
@@ -66,11 +67,11 @@ const Dashboard = () => {
         </HeaderButton>
 
         <HeaderButton
-          variant='secondary'
-          icon={CreditCard}
-          onClick={() => setIsSettleUpModalOpen(true)}
+          variant='success'
+          icon={Group}
+          onClick={() => setIsNewGroupModalOpen(true)}
         >
-          Settle Up
+          New Group
         </HeaderButton>
       </PageHeaderSection>
 
@@ -185,12 +186,12 @@ const Dashboard = () => {
       </Modal>
 
       <Modal
-        isOpen={isSettleUpModalOpen}
-        onClose={() => setIsSettleUpModalOpen(false)}
-        title={"Settle Up"}
-        subtitle={"Settle Up Subtitle"}
+        isOpen={isNewGroupModalOpen}
+        onClose={() => setIsNewGroupModalOpen(false)}
+        title={"New Group"}
+        subtitle={"New Group Subtitle"}
       >
-
+        <NewGroupForm setIsNewGroupModalOpen={setIsNewGroupModalOpen} refetchFunction={refetchAllData} />
       </Modal>
     </PageLayout>
   );
