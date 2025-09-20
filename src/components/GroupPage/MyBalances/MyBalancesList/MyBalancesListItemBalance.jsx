@@ -2,7 +2,7 @@ import React from 'react'
 import { parseAmount } from '../../../../utils/parseAmount';
 import { CheckCircle } from 'lucide-react';
 
-const MyBalancesListItemBalance = ({ userBalance }) => {
+const MyBalancesListItemBalance = ({ userBalance, username, handleSettleUpButtons }) => {
   return (
     <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 sm:gap-2 flex-shrink-0">
       {userBalance !== 0 && (
@@ -13,7 +13,7 @@ const MyBalancesListItemBalance = ({ userBalance }) => {
           </p>
 
           {userBalance < 0 ? (
-            <button className="text-xs text-blue-600 hover:text-blue-700 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-all duration-200 cursor-pointer">
+            <button className="text-xs text-blue-600 hover:text-blue-700 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-all duration-200 cursor-pointer" onClick={() => handleSettleUpButtons(username)}>
               settle up
             </button>
           ) : (

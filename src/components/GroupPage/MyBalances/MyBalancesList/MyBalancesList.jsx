@@ -1,7 +1,7 @@
 import React from 'react'
 import MyBalancesListItem from './MyBalancesListItem';
 
-const MyBalancesList = ({ userBalances }) => {
+const MyBalancesList = ({ userBalances, handleSettleUpButtons }) => {
   return (
     <div className="space-y-3">
       {Object.entries(userBalances).map(([username, userBalance]) => (
@@ -9,6 +9,7 @@ const MyBalancesList = ({ userBalances }) => {
           key={username}
           username={username}
           userBalance={userBalance}
+          handleSettleUpButtons={handleSettleUpButtons}
         />
       ))}
     </div>

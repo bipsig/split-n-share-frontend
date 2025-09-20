@@ -36,6 +36,8 @@ import Modal from '../components/modals/Modal';
 import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
 import HeaderButton from '../components/common/PageHeader/HeaderButton';
 import AddMembersToGroupForm from '../components/ui/Forms/AddMembersToGroupForm/AddMembersToGroupForm';
+import { generateUserBalanceBreakdown } from '../utils/generateUserBalanceBreakdown';
+import SettleUpForm from '../components/ui/Forms/SettleUpForm/SettleUpForm';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
@@ -44,6 +46,9 @@ const GroupPage = () => {
 
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
   const [isAddMembersModalOpen, setIsAddMembersModalOpen] = useState(false);
+  const [isSettleUpModalOpen, setIsSettleUpModalOpen] = useState(false);
+
+  const [defaultBalanceOptionUser, setDefaultBalanceOptionUser] = useState(null);
 
   const { username: currentUsername } = useUser();
 
@@ -87,6 +92,16 @@ const GroupPage = () => {
 
     return matchesSearch && matchesFilter;
   });
+
+  const userBalances = generateUserBalanceBreakdown(currentUsername, groupData?.transactionMatrix?.matrix);
+
+  const handleSettleUpButtons = (username = null) => {
+
+    if (username) {
+      setDefaultBalanceOptionUser(username);
+    }
+    setIsSettleUpModalOpen(true);
+  }
 
   if (isGroupLoading || isTransactionsLoading) {
     return <GroupDetailPageSkeleton />;
@@ -140,6 +155,7 @@ const GroupPage = () => {
           <HeaderButton
             variant='primary'
             icon={CreditCard}
+            onClick={() => handleSettleUpButtons()}
           >
             Settle Up
           </HeaderButton>
@@ -232,7 +248,7 @@ const GroupPage = () => {
           )}
 
           {activeTab === 'balances' && (
-            <MyBalancesTab user={currentUsername} transactionMatrix={groupData.transactionMatrix} />
+            <MyBalancesTab userBalances={userBalances} handleSettleUpButtons={handleSettleUpButtons} />
           )}
 
           {activeTab === 'group-balances' && (
@@ -285,6 +301,22 @@ const GroupPage = () => {
           setIsAddMembersModalOpen={setIsAddMembersModalOpen}
           existingMembers={groupData.members}
           refetchAPIFunction={refetchAllData}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isSettleUpModalOpen}
+        onClose={() => setIsSettleUpModalOpen(false)}
+        title={"Settle Up"}
+        subtitle={"Settle Up Subtitle"}
+      >
+        <SettleUpForm 
+          userBalances={userBalances} 
+          defaultGroup={id}
+          defaultBalanceOptionUser={defaultBalanceOptionUser}
+          setIsSettleUpModalOpen={setIsSettleUpModalOpen}
+          refetchAPIFunction={refetchAllData}
+          // refetchAPIFunction={refetchAllData}
         />
       </Modal>
 

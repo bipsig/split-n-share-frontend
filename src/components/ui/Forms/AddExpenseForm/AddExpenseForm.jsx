@@ -14,8 +14,6 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
 
   const [groupMembers, setGroupMembers] = useState([]);
 
-  const isLoading = false;
-
   const [addExpenseDataForm, setAddExpenseDataForm] = useState({
     description: "",
     amount: null,
@@ -114,7 +112,7 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
           formObjectAttribute={'groupId'}
           handleChangeFunction={handleInputChange}
           options={userGroups}
-          isLoading={groupsLoading} // Pass loading state
+          isLoading={groupsLoading} 
         />
 
         <FormInputField
@@ -161,7 +159,7 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
         <button
           type="button"
           onClick={() => setIsAddExpenseModalOpen(false)}
-          disabled={isLoading}
+          disabled={expenseAddLoading}
           className="px-6 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancel
@@ -169,10 +167,10 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
         <button
           type="button"
           onClick={handleAddExpense}
-          disabled={!isFormValid || isLoading}
+          disabled={!isFormValid || expenseAddLoading}
           className="flex items-center justify-center px-6 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 min-w-[120px]"
         >
-          {isLoading ? (
+          {expenseAddLoading ? (
             <>
               <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
               Adding...

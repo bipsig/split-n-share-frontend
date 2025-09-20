@@ -1,13 +1,14 @@
 export const generateUserBalanceBreakdown = (username, matrix) => {
-  const obj = {};
-  
-  for (let row in matrix) {
-    if (row === username) {
-      continue;
-    }
+  if (!matrix || !matrix[username]) {
+    return {};
+  }
 
-    obj [row] = matrix [username][row] - matrix [row][username];
+  const obj = {};
+  for (let row in matrix) {
+    if (row === username) continue;
+
+    obj[row] = (matrix[username][row] || 0) - (matrix[row]?.[username] || 0);
   }
 
   return obj;
-}
+};
