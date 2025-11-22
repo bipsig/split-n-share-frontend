@@ -4,7 +4,8 @@ import {
   CreditCard,
   DollarSign,
   ArrowUpDown,
-  Plus
+  Plus,
+  Download
 } from 'lucide-react';
 import { parseAmount } from '../utils/parseAmount';
 import PageLayout from '../layouts/PageLayout';
@@ -23,6 +24,8 @@ import TransactionListItem from '../components/common/AllExpenses/TransactionLis
 import QuickStatsSection from '../components/common/AllExpenses/QuickStatsSection';
 import Modal from '../components/modals/Modal';
 import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import ExpensesPdf from '../components/pdfGenerator/ExpensesPdf';
 
 const Expenses = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,7 +42,7 @@ const Expenses = () => {
   const transactionsData = transactions ? transactions.transactionsData : [];
 
   const refetchAllData = async () => {
-    console.log ("Refething all data");
+    console.log("Refething all data");
     try {
       await Promise.all([
         refetchTransactions()
@@ -105,6 +108,7 @@ const Expenses = () => {
   const totalExpenses = transactionsData.filter(t => t.type === 'Expense').reduce((sum, t) => sum + t.amount, 0);
   const totalPayments = transactionsData.filter(t => t.type === 'Payment').reduce((sum, t) => sum + t.amount, 0);
   const yourExpenses = transactionsData.filter(t => t.user_paid.username === currentUsername).reduce((sum, t) => sum + t.amount, 0);
+  console.log(transactionsData);
 
   if (isTransactionsLoading) {
     return <AllExpensesPageSkeleton />
@@ -124,6 +128,19 @@ const Expenses = () => {
         <HeaderButton variant='primary' icon={Plus} onClick={() => setIsAddExpenseModalOpen(true)}>
           Add Expense
         </HeaderButton>
+
+        {sortedTransactions && sortedTransactions.length > 0 && (
+          <PDFDownloadLink
+            document={<ExpensesPdf transactions={sortedTransactions} currentUsername={currentUsername} />}
+            fileName={`expenses-report-${currentUsername}-${new Date().toLocaleDateString('en-IN').replace(/\//g, '-')}.pdf`}
+          >
+            {({ loading }) =>
+              <HeaderButton variant="warning" icon={Download}>
+                {loading ? "Preparing..." : "Export PDF"}
+              </HeaderButton>
+            }
+          </PDFDownloadLink>
+        )}
       </PageHeaderSection>
 
       <PageOverviewSection>

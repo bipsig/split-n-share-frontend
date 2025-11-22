@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../redux/slices/api/authApi';
 import toast from 'react-hot-toast';
 import { Loader2, LogIn, User, Lock, Eye, EyeOff, TrendingUp } from 'lucide-react';
@@ -178,9 +178,9 @@ const Login = () => {
             </a>
             <div className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+              <Link to={'/register'} href="#" className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
                 Sign up
-              </a>
+              </Link>
             </div>
           </div>
         </div>

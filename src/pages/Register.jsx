@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Loader2, UserPlus, User, Lock, Mail, Phone, MapPin, Briefcase, Eye, EyeOff, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -391,9 +392,9 @@ const Register = () => {
               {/* Footer Links */}
               <div className="text-center text-sm text-gray-600">
                 Already have an account?{' '}
-                <button className="text-purple-600 hover:text-purple-700 font-medium transition-colors">
+                <Link to={'/login'} className="text-purple-600 hover:text-purple-700 font-medium transition-colors">
                   Sign in
-                </button>
+                </Link>
               </div>
             </div>
           )}
