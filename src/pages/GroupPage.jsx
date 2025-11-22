@@ -38,6 +38,7 @@ import HeaderButton from '../components/common/PageHeader/HeaderButton';
 import AddMembersToGroupForm from '../components/ui/Forms/AddMembersToGroupForm/AddMembersToGroupForm';
 import { generateUserBalanceBreakdown } from '../utils/generateUserBalanceBreakdown';
 import SettleUpForm from '../components/ui/Forms/SettleUpForm/SettleUpForm';
+import { getGroupIcon } from '../utils/getGroupIcon';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
@@ -122,7 +123,7 @@ const GroupPage = () => {
           </button>
 
           <div className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${getCategoryColor(groupData.category)} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0`}>
-            <div className="text-white">{getCategoryIcon(groupData.category, "large")}</div>
+            <div className="text-white">{getGroupIcon(groupData.selectedIcon, "large")}</div>
           </div>
 
           <div className="flex-1 min-w-0">
