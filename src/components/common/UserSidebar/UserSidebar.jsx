@@ -233,6 +233,9 @@ const UserSidebar = () => {
               {menuOpen && (
                 <div className="absolute bottom-full left-0 right-0 mb-2 bg-gray-800 rounded-xl shadow-xl border border-gray-700 py-2 z-50 animate-in slide-in-from-bottom-2 duration-200">
                   <Link 
+                    onClick={() => {
+                      setMenuOpen(false);
+                    }}
                     to='/user/profile' 
                     className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-700 text-sm text-gray-200 hover:text-white transition-colors duration-200"
                   >
