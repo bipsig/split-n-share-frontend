@@ -18,6 +18,7 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
     description: "",
     amount: null,
     groupId: defaultGroup || "",
+    category: "Other",
     user_paid: "",
     users_involved: [],
     type: "Expense",
@@ -38,7 +39,7 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
         }));
       }
     }
-  }, [defaultGroup, groupsData] )
+  }, [defaultGroup, groupsData])
 
   const userGroups = groupsData?.groupsSummary?.map((group) => {
     return {
@@ -47,6 +48,27 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
       title: group.name,
     }
   }) || [];
+
+  // { id: 1, value: "", title: "Select currency" },
+  const expenseCategories = [
+    { id: 2, value: "Food & Dining", title: "Food & Dining" },
+    { id: 3, value: "Transportation", title: "Transportation" },
+    { id: 4, value: "Shopping", title: "Shopping" },
+    { id: 5, value: "Entertainment", title: "Entertainment" },
+    { id: 6, value: "Bills & Utilities", title: "Bills & Utilities" },
+    { id: 7, value: "Healthcare", title: "Healthcare" },
+    { id: 8, value: "Education", title: "Education" },
+    { id: 9, value: "Travel", title: "Travel" },
+    { id: 10, value: "Groceries", title: "Groceries" },
+    { id: 11, value: "Rent & Housing", title: "Rent & Housing" },
+    { id: 12, value: "Sports & Recreation", title: "Sports & Recreation" },
+    { id: 13, value: "Personal Care", title: "Personal Care" },
+    { id: 14, value: "Insurance", title: "Insurance" },
+    { id: 15, value: "Gifts", title: "Gifts" },
+    { id: 16, value: "Charity", title: "Charity" },
+    { id: 17, value: "Business", title: "Business" },
+    { id: 18, value: "Other", title: "Other" },
+  ];
 
   const handleInputChange = (field, value) => {
     if (field === 'groupId' && value !== "") {
@@ -112,7 +134,7 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
           formObjectAttribute={'groupId'}
           handleChangeFunction={handleInputChange}
           options={userGroups}
-          isLoading={groupsLoading} 
+          isLoading={groupsLoading}
         />
 
         <FormInputField
@@ -143,6 +165,16 @@ const AddExpenseForm = ({ setIsAddExpenseModalOpen, refetchDashboardData, refetc
           handleChangeFunction={handleInputChange}
           options={groupMembers}
           totalAmount={parseFloat(addExpenseDataForm.amount) || 0}
+        />
+
+        <FormInputSelect
+          label={"Category of Expense"}
+          // required={true}
+          formObject={addExpenseDataForm}
+          formObjectAttribute={'category'}
+          handleChangeFunction={handleInputChange}
+          options={expenseCategories}
+          placeholder='Select Expense Category'
         />
 
         <FormInputField
