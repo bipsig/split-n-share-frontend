@@ -16,8 +16,12 @@ const UserSecuritySection = ({
   showConfirmPassword,
   setShowConfirmPassword,
   handlePasswordChange,
-  isLoading 
+  isLoading,
+  passwordUpdationDate
 }) => {
+  const lastPasswordChange = Math.floor((new Date() - new Date(passwordUpdationDate)) / (1000 * 60 * 60 * 24));
+
+
   return (
     <UserProfileSectionCard
       icon={Shield}
@@ -30,7 +34,7 @@ const UserSecuritySection = ({
           <UserActionItem
             icon={Lock}
             title="Password"
-            subtitle="Last changed 30 days ago"
+            subtitle={`Last changed ${lastPasswordChange} days ago`}
             actionText="Change"
             variant="danger"
             iconBg="bg-gray-100 text-gray-600"

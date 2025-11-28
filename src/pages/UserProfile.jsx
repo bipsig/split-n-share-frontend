@@ -21,6 +21,7 @@ import UserProfileCard from '../components/common/UserProfile/UserProfileCard';
 import UserSecuritySection from '../components/common/UserProfile/UserSecuritySection';
 import UserAccountStatistics from '../components/common/UserProfile/UserAccountStatistics';
 import BufferLength from '../layouts/BufferLength';
+import { set } from 'react-hook-form';
 
 const UserProfile = () => {
   const [updateUserDetails, { isLoading, isError, error, isSuccess, data }] = useUpdateUserDetailsMutation();
@@ -53,7 +54,8 @@ const UserProfile = () => {
     totalBalance: 0,
     createdAt: new Date().toISOString(),
     groups: [],
-    transactions: []
+    transactions: [],
+    passwordUpdationDate: new Date().toISOString()
   };
 
   const [editData, setEditData] = useState(userData);
@@ -62,6 +64,7 @@ const UserProfile = () => {
     newPassword: '',
     confirmPassword: ''
   });
+  const [passwordUpdationDate, setPasswordUpdationDate] = useState(userData.passwordUpdationDate);
 
   // Profile editing handlers
   const handleEdit = () => {
@@ -108,12 +111,11 @@ const UserProfile = () => {
     };
 
     try {
-      // Simulate API call - replace with your actual password change API
-      // await new Promise(resolve => setTimeout(resolve, 1000));
       const result = await updateUserPassword(requestBody).unwrap();
       
       setIsChangingPassword(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setPasswordUpdationDate(new Date().toISOString());
       toast.success('Password changed successfully!');
 
 
@@ -218,6 +220,7 @@ const UserProfile = () => {
             setShowConfirmPassword={setShowConfirmPassword}
             handlePasswordChange={handlePasswordChange}
             isLoading={isLoading}
+            passwordUpdationDate={passwordUpdationDate}
           />
 
           {/* Account Actions */}
