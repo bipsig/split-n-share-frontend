@@ -97,7 +97,7 @@ const Register = () => {
       </div>
 
       {/* Register Card */}
-      <div className="relative w-full max-w-4xl">
+      <div className="relative w-full max-w-4xl max-h-screen md:max-h-none overflow-y-auto">
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-xl mb-4">
