@@ -162,11 +162,16 @@ const UserSidebar = () => {
               </div>
               <ul className="space-y-1 list-none">
                 {items.map((item) => (
-                  <SidebarItemMenu 
-                    key={item.key} 
-                    item={item} 
-                    isActive={item.path === location.pathname}
-                  />
+                  <div
+                    key={item.key}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <SidebarItemMenu 
+                      key={item.key} 
+                      item={item} 
+                      isActive={item.path === location.pathname}
+                    />
+                  </div>
                 ))}
               </ul>
             </div>
