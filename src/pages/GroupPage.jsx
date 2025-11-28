@@ -39,6 +39,7 @@ import AddMembersToGroupForm from '../components/ui/Forms/AddMembersToGroupForm/
 import { generateUserBalanceBreakdown } from '../utils/generateUserBalanceBreakdown';
 import SettleUpForm from '../components/ui/Forms/SettleUpForm/SettleUpForm';
 import { getGroupIcon } from '../utils/getGroupIcon';
+import BufferLength from '../layouts/BufferLength';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
@@ -277,6 +278,8 @@ const GroupPage = () => {
           )}
         </div>
       </div>
+
+      <BufferLength />
 
       <Modal
         isOpen={isAddExpenseModalOpen}

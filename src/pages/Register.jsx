@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Loader2, UserPlus, User, Lock, Mail, Phone, MapPin, Briefcase, Eye, EyeOff, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import BufferLength from '../layouts/BufferLength';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -404,6 +405,8 @@ const Register = () => {
         <p className="text-center text-sm text-gray-500 mt-6">
           By creating an account, you agree to our Terms of Service and Privacy Policy
         </p>
+
+        <BufferLength />
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ import SearchBar from '../components/common/SearchBar/SearchBar';
 import FilterSelect from '../components/common/FilterSelect/FilterSelect';
 import Modal from '../components/modals/Modal';
 import NewGroupForm from '../components/ui/Forms/NewGroupForm/CreateNewGroupForm';
+import BufferLength from '../layouts/BufferLength';
 
 const Groups = () => {
   const { data, isLoading: isGroupsDataLoading, isError: isGroupsDataError, refetch } = useGetCompleteGroupsSummaryQuery();
@@ -166,6 +167,8 @@ const Groups = () => {
           )}
         </GroupsListSection>
       )}
+
+      <BufferLength />
 
       {isNewGroupModalOpen && (
         <Modal

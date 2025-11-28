@@ -18,6 +18,7 @@ import BottomSectionGrid from '../components/common/Dashboard/BottomSectionGrid'
 import Modal from '../components/modals/Modal';
 import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
 import NewGroupForm from '../components/ui/Forms/NewGroupForm/CreateNewGroupForm';
+import BufferLength from '../layouts/BufferLength';
 
 const Dashboard = () => {
   const { data: financialData, isLoading: isFinancialLoading, isError: isFinancialError, refetch: refetchFinancialData } = useGetFinancialSummaryQuery();
@@ -161,27 +162,29 @@ const Dashboard = () => {
       </PageOverviewSection>
 
       {/* Recent Activity Section */}
-      <RecentActivitySection 
+      <RecentActivitySection
         transactions={recentTransactions}
         isLoading={isTransactionsLoading}
       />
 
       {/* Bottom Section - Groups and Summary */}
-      <BottomSectionGrid 
+      <BottomSectionGrid
         groupsData={groupsData}
         isGroupsLoading={isGroupsLoading}
       />
+
+      <BufferLength />
 
       <Modal
         isOpen={isAddExpenseModalOpen}
         onClose={() => setIsAddExpenseModalOpen(false)}
         title="Add Expense"
-        subtitle="Add Expense Subtitle" 
+        subtitle="Add Expense Subtitle"
       >
         <AddExpenseForm
           setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
           // refetchDashboardData={refetchAllData}
-          refecthAPIFunction={refetchAllData} 
+          refecthAPIFunction={refetchAllData}
         />
       </Modal>
 

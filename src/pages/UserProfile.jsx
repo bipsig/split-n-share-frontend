@@ -20,6 +20,7 @@ import StatsCard from '../components/common/PageOverview/StatsCard';
 import UserProfileCard from '../components/common/UserProfile/UserProfileCard';
 import UserSecuritySection from '../components/common/UserProfile/UserSecuritySection';
 import UserAccountStatistics from '../components/common/UserProfile/UserAccountStatistics';
+import BufferLength from '../layouts/BufferLength';
 
 const UserProfile = () => {
   const [updateUserDetails, { isLoading, isError, error, isSuccess, data }] = useUpdateUserDetailsMutation();
@@ -226,6 +227,8 @@ const UserProfile = () => {
           <UserAccountStatistics userData={userData} />
         </div>
       </div>
+
+      <BufferLength />
 
       {/* Custom Scrollbar Styles */}
       <style jsx>{`

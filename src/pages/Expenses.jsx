@@ -26,6 +26,7 @@ import Modal from '../components/modals/Modal';
 import AddExpenseForm from '../components/ui/Forms/AddExpenseForm/AddExpenseForm';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import ExpensesPdf from '../components/pdfGenerator/ExpensesPdf';
+import BufferLength from '../layouts/BufferLength';
 
 const Expenses = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -229,6 +230,8 @@ const Expenses = () => {
 
       {/* Quick Stats */}
       <QuickStatsSection sortedTransactions={sortedTransactions} transactionsData={transactionsData} totalExpenses={totalExpenses} totalPayments={totalPayments} />
+
+      <BufferLength />
 
       <Modal
         isOpen={isAddExpenseModalOpen}
