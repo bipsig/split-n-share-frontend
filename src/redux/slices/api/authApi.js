@@ -26,9 +26,22 @@ export const authApi = apiSlice.injectEndpoints({
         }
         return response;
       },
-    })
+    }),
+    register: builder.mutation({
+      query: (userData) => ({
+        url: 'auth/register',
+        method: 'POST',
+        body: userData,
+      }),
+      transformResponse: (response) => {
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        return response;
+      },
+    }),
     // MORE ENDPOINTS
   })
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation } = authApi;
