@@ -15,6 +15,7 @@ import PublicRoute from './routes/PublicRoute'
 import UserSidebar from './components/common/UserSidebar/UserSidebar'
 import { Toaster } from 'react-hot-toast'
 import ActivityPage from './pages/Activity'
+import AuthInitializer from './components/auth/AuthInitializer'
 
 const App = () => {
   const [position, setPosition] = useState("top-right");
@@ -22,9 +23,9 @@ const App = () => {
   useEffect(() => {
     const update = () => {
       if (window.innerWidth < 640) {
-        setPosition("bottom-center"); // mobile
+        setPosition("bottom-center");
       } else {
-        setPosition("top-right"); // desktop
+        setPosition("top-right");
       }
     };
 
@@ -105,6 +106,7 @@ const App = () => {
 
   return (
     <>
+      <AuthInitializer />
       <RouterProvider router={router} />
       <Toaster position={position} toastOptions={{ duration: 3000 }} />;
     </>

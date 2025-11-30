@@ -3,8 +3,8 @@ import { authApi } from "../api/authApi";
 import { usersApi } from "../api/usersApi";
 
 const initialState = {
-  token: null,
-  isAuthenticated: false,
+  token: localStorage.getItem('token') || null,
+  isAuthenticated: !!localStorage.getItem('token'),
 };
 
 const authSlice = createSlice({
@@ -19,12 +19,16 @@ const authSlice = createSlice({
           const { data } = action.payload;
           state.token = data.accessToken;
           state.isAuthenticated = true;
+
+          localStorage.setItem('token', data.accessToken);
         }
       )
       .addMatcher(
         authApi.endpoints.logout.matchFulfilled, (state, action) => {
           state.token = null,
           state.isAuthenticated = false
+
+          localStorage.removeItem('token');
         }
       )
       .addMatcher(
