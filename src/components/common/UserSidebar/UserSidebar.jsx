@@ -192,11 +192,17 @@ const UserSidebar = () => {
               <ul className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar list-none">
                 {groups?.groups?.length > 0 ? (
                   groups.groups.map((group) => (
-                    <SidebarItemGroup 
-                      key={group.group} 
-                      group={group} 
-                      isActive={`/user/groups/${group.groupId}` === location.pathname}
-                    />
+                    <div
+                      key={group.group}
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      <SidebarItemGroup 
+                        key={group.group} 
+                        group={group} 
+                        isActive={`/user/groups/${group.groupId}` === location.pathname}
+                        setSidebarOpen={setSidebarOpen}
+                      />
+                    </div>
                   ))
                 ) : (
                   <li className="text-sm text-gray-500 italic px-3 py-4 text-center list-none">
