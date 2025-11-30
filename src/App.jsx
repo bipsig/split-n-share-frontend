@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
@@ -17,6 +17,23 @@ import { Toaster } from 'react-hot-toast'
 import ActivityPage from './pages/Activity'
 
 const App = () => {
+  const [position, setPosition] = useState("top-right");
+
+  useEffect(() => {
+    const update = () => {
+      if (window.innerWidth < 640) {
+        setPosition("bottom-center"); // mobile
+      } else {
+        setPosition("top-right"); // desktop
+      }
+    };
+
+    update(); // initial
+    window.addEventListener("resize", update);
+
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: '/',
@@ -89,7 +106,7 @@ const App = () => {
   return (
     <>
       <RouterProvider router={router} />
-      <Toaster position='top-right' toastOptions={{duration: 3000 }} />
+      <Toaster position={position} toastOptions={{ duration: 3000 }} />;
     </>
   )
 }
