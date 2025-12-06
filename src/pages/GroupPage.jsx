@@ -40,15 +40,19 @@ import { generateUserBalanceBreakdown } from '../utils/generateUserBalanceBreakd
 import SettleUpForm from '../components/ui/Forms/SettleUpForm/SettleUpForm';
 import { getGroupIcon } from '../utils/getGroupIcon';
 import BufferLength from '../layouts/BufferLength';
+import TransactionDetails from '../components/GroupPage/TransactionList/TransactionListItem/TransactionDetails';
+import TransactionDetailsModal from '../components/GroupPage/TransactionList/TransactionDetailsModal/TransactionDetailsModal';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
+  const [activeTransaction, setActiveTransaction] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
 
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
   const [isAddMembersModalOpen, setIsAddMembersModalOpen] = useState(false);
   const [isSettleUpModalOpen, setIsSettleUpModalOpen] = useState(false);
+  const [isViewTransactionModalOpen, setIsViewTransactionModalOpen] = useState(false);
 
   const [defaultBalanceOptionUser, setDefaultBalanceOptionUser] = useState(null);
 
@@ -242,7 +246,12 @@ const GroupPage = () => {
                   />
                 ) : (
                   filteredTransactions.map((transaction) => (
-                    <TransactionList transaction={transaction} />
+                    <TransactionList 
+                      transaction={transaction}
+                      setActiveTransaction={setActiveTransaction}
+                      setIsViewTransactionModalOpen={setIsViewTransactionModalOpen}
+                      key={transaction._id} 
+                    />
                   ))
                 )}
               </div>
@@ -321,6 +330,17 @@ const GroupPage = () => {
           setIsSettleUpModalOpen={setIsSettleUpModalOpen}
           refetchAPIFunction={refetchAllData}
           // refetchAPIFunction={refetchAllData}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isViewTransactionModalOpen}
+        onClose={() => setIsViewTransactionModalOpen(false)}
+        title={"View Transaction"}
+        subtitle={"View Transaction Subtitle"}
+      >
+        <TransactionDetailsModal
+          transaction={activeTransaction} 
         />
       </Modal>
 
