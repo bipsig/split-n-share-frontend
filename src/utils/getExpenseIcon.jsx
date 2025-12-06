@@ -18,8 +18,8 @@ import {
   Receipt,
 } from "lucide-react";
 
-export const getExpenseIcon = (category) => {
-  const iconClass = "w-5 h-5 sm:w-6 sm:h-6 text-white";
+export const getExpenseIcon = (category, extraClasses) => {
+  const iconClass = `w-5 h-5 sm:w-6 sm:h-6 text-white ${extraClasses || ""}`;
 
   switch (category) {
     case "Food & Dining":

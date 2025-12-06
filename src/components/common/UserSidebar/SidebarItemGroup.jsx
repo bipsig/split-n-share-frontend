@@ -5,7 +5,6 @@ import { getGroupIcon } from '../../../utils/getGroupIcon';
 
 
 const SidebarItemGroup = ({ group, isActive = false }) => {
-  console.log(`Sidebar group details: `, group);
   return (
     <li className="relative">
       <Link
