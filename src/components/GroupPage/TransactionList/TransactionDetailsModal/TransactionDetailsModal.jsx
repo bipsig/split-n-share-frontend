@@ -22,8 +22,6 @@ const TransactionDetailsModal = ({ transaction }) => {
     }).format(amount);
   };
 
-  console.log('Rendering TransactionDetails for transaction:', transaction);
-
   return (
     <div className="space-y-6">
       {/* Amount Section */}

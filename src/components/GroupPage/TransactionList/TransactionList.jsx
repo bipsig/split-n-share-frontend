@@ -6,7 +6,8 @@ import TransactionAmount from './TransactionListItem/TransactionAmount';
 const TransactionList = ({ 
   transaction,
   setActiveTransaction,
-  setIsViewTransactionModalOpen
+  setIsViewTransactionModalOpen,
+  setIsDeleteTransactionModalOpen
 }) => {
   return (
     <div key={transaction._id} className="bg-white/60 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gray-100 hover:bg-white/80 transition-all duration-200 hover:shadow-lg">
@@ -24,6 +25,7 @@ const TransactionList = ({
           transaction={transaction} 
           setActiveTransaction={setActiveTransaction}
           setIsViewTransactionModalOpen={setIsViewTransactionModalOpen}
+          setIsDeleteTransactionModalOpen={setIsDeleteTransactionModalOpen}
         />
       </div>
     </div>

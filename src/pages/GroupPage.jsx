@@ -42,6 +42,7 @@ import { getGroupIcon } from '../utils/getGroupIcon';
 import BufferLength from '../layouts/BufferLength';
 import TransactionDetails from '../components/GroupPage/TransactionList/TransactionListItem/TransactionDetails';
 import TransactionDetailsModal from '../components/GroupPage/TransactionList/TransactionDetailsModal/TransactionDetailsModal';
+import TransactionDeleteModal from '../components/GroupPage/TransactionList/TransactionDeleteModal/TransactionDeleteModal';
 
 const GroupPage = () => {
   const [activeTab, setActiveTab] = useState('transactions');
@@ -53,6 +54,7 @@ const GroupPage = () => {
   const [isAddMembersModalOpen, setIsAddMembersModalOpen] = useState(false);
   const [isSettleUpModalOpen, setIsSettleUpModalOpen] = useState(false);
   const [isViewTransactionModalOpen, setIsViewTransactionModalOpen] = useState(false);
+  const [isDeleteTransactionModalOpen, setIsDeleteTransactionModalOpen] = useState(false);
 
   const [defaultBalanceOptionUser, setDefaultBalanceOptionUser] = useState(null);
 
@@ -250,6 +252,7 @@ const GroupPage = () => {
                       transaction={transaction}
                       setActiveTransaction={setActiveTransaction}
                       setIsViewTransactionModalOpen={setIsViewTransactionModalOpen}
+                      setIsDeleteTransactionModalOpen={setIsDeleteTransactionModalOpen}
                       key={transaction._id} 
                     />
                   ))
@@ -335,12 +338,31 @@ const GroupPage = () => {
 
       <Modal
         isOpen={isViewTransactionModalOpen}
-        onClose={() => setIsViewTransactionModalOpen(false)}
+        onClose={() => {
+          setIsViewTransactionModalOpen(false)
+          setActiveTransaction(null);
+        }}
         title={"View Transaction"}
         subtitle={"View Transaction Subtitle"}
       >
         <TransactionDetailsModal
           transaction={activeTransaction} 
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isDeleteTransactionModalOpen}
+        onClose={() => {
+          setIsDeleteTransactionModalOpen(false);
+          setActiveTransaction(null);
+        }}
+        title={"Delete Transaction"}
+      >
+        <TransactionDeleteModal 
+          transaction={activeTransaction}
+          setActiveTransaction={setActiveTransaction}
+          setIsDeleteTransactionModalOpen={setIsDeleteTransactionModalOpen}
+          refetchAPIFunction={refetchAllData}
         />
       </Modal>
 
