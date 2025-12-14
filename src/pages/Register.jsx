@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Loader2, UserPlus, User, Lock, Mail, Phone, MapPin, Briefcase, Eye, EyeOff, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { Loader2, UserPlus, User, Lock, Mail, Phone, MapPin, Briefcase, Eye, EyeOff, TrendingUp, CheckCircle2, Cake, MapPinned } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BufferLength from '../layouts/BufferLength';
 import RegisterFormTextInput from '../components/ui/Forms/RegisterForm/RegisterFormTextInput';
 import { useRegisterMutation } from '../redux/slices/api/authApi';
 import toast from 'react-hot-toast';
+import PrimaryButton from '../components/ui/Forms/RegisterForm/PrimaryButton';
 
 const Register = () => {
   const [register, { isLoading, isError, error, isSuccess }] = useRegisterMutation();
@@ -16,6 +17,8 @@ const Register = () => {
     username: '',
     password: '',
     confirmPassword: '',
+    dateOfBirth: '',
+    birthCity: '',    
     mobileNumber: '',
     location: '',
     occupation: '',
@@ -59,7 +62,7 @@ const Register = () => {
     }
 
     try {
-      if (formData.email && formData.username && formData.password && formData.firstName && formData.lastName && formData.gender) {
+      if (formData.email && formData.username && formData.password && formData.firstName && formData.lastName && formData.gender && formData.dateOfBirth && formData.birthCity) {
         const result = await register(formData).unwrap();
 
         if (result.success) {
@@ -100,7 +103,7 @@ const Register = () => {
       </div>
 
       {/* Register Card */}
-      <div className="relative w-full max-w-4xl max-h-screen xl:max-h-none overflow-y-auto">
+      <div className="relative w-full max-w-4xl max-h-screen overflow-y-auto">
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-xl mb-4">
@@ -236,6 +239,30 @@ const Register = () => {
                 />
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <RegisterFormTextInput
+                  type='date'
+                  label="Date of Birth"
+                  Icon={Cake}
+                  field="dateOfBirth"
+                  handleInputChange={handleChange}
+                  formData={formData}
+                  placeholder="Select Date of Birth"
+                  required={true}
+                />
+
+                <RegisterFormTextInput
+                  type='text'
+                  label="City of Birth"
+                  Icon={MapPinned}
+                  field="birthCity"
+                  handleInputChange={handleChange}
+                  formData={formData}
+                  placeholder="Dhanbad"
+                  required={true}
+                />
+              </div>
+
               {/* Mobile and Location */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <RegisterFormTextInput
@@ -250,7 +277,7 @@ const Register = () => {
 
                 <RegisterFormTextInput
                   type='text'
-                  label="Location"
+                  label="Current Location"
                   Icon={MapPin}
                   field="location"
                   handleInputChange={handleChange}
@@ -301,7 +328,12 @@ const Register = () => {
               )}
 
               {/* Register Button */}
-              <button
+              <PrimaryButton
+                isLoading={isLoading}
+                loadingText="Creating Account..."
+                buttonText="Create Account" 
+              />
+              {/* <button
                 type="submit"
                 disabled={isLoading}
                 onClick={handleRegister}
@@ -318,7 +350,7 @@ const Register = () => {
                     <span>Create Account</span>
                   </>
                 )}
-              </button>
+              </button> */}
 
               {/* Footer Links */}
               <div className="text-center text-sm text-gray-600">

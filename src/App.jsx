@@ -16,6 +16,7 @@ import UserSidebar from './components/common/UserSidebar/UserSidebar'
 import { Toaster } from 'react-hot-toast'
 import ActivityPage from './pages/Activity'
 import AuthInitializer from './components/auth/AuthInitializer'
+import ResetPassword from './pages/ResetPassword'
 
 const App = () => {
   const [position, setPosition] = useState("top-right");
@@ -50,6 +51,10 @@ const App = () => {
             {
               path: 'login',
               element: <Login />
+            },
+            {
+              path: 'reset-password',
+              element: <ResetPassword />
             },
             {
               path: 'register',

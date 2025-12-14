@@ -50,6 +50,27 @@ const UserProfileCard = ({ userData, editData, setEditData, isEditing }) => {
           />
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <UserFormField
+            label="Date of Birth"
+            value={new Date(userData.dateOfBirth).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            })}
+            isEditing={false}
+            disabled={true}
+            disabledMessage="Date of Birth cannot be changed"
+          />
+          <UserFormField
+            label="City of Birth"
+            value={userData.birthCity}
+            isEditing={false}
+            disabled={true}
+            disabledMessage="City of Birth cannot be changed"
+          />
+        </div>
+
         {/* Contact Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <UserFormField
