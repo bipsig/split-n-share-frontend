@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
