@@ -124,7 +124,6 @@ const Register = () => {
               <p className="text-gray-600 mb-6">Your account has been created successfully.</p>
               <Link to={'/login'}>
                 <button
-                  onClick={() => setSuccess(false)}
                   className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                 >
                   Back to Login
@@ -328,12 +327,13 @@ const Register = () => {
               )}
 
               {/* Register Button */}
-              <PrimaryButton
+              {/* <PrimaryButton
                 isLoading={isLoading}
                 loadingText="Creating Account..."
                 buttonText="Create Account" 
-              />
-              {/* <button
+              /> */}
+              
+              <button
                 type="submit"
                 disabled={isLoading}
                 onClick={handleRegister}
@@ -350,7 +350,7 @@ const Register = () => {
                     <span>Create Account</span>
                   </>
                 )}
-              </button> */}
+              </button>
 
               {/* Footer Links */}
               <div className="text-center text-sm text-gray-600">
