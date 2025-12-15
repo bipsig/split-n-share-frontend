@@ -17,6 +17,9 @@ import { Toaster } from 'react-hot-toast'
 import ActivityPage from './pages/Activity'
 import AuthInitializer from './components/auth/AuthInitializer'
 import ResetPassword from './pages/ResetPassword'
+import AppWithHealthCheck from './AppWithHealthCheck'
+import NotFound from './pages/NotFound'
+import ErrorHandlingPage from './pages/ErrorHandlingPage'
 
 const App = () => {
   const [position, setPosition] = useState("top-right");
@@ -30,16 +33,15 @@ const App = () => {
       }
     };
 
-    update(); // initial
+    update();
     window.addEventListener("resize", update);
-
     return () => window.removeEventListener("resize", update);
   }, []);
 
   const router = createBrowserRouter([
     {
       path: '/',
-      // element: <SideBar />,
+      errorElement: <ErrorHandlingPage />,
       children: [
         {
           index: true,
@@ -72,7 +74,7 @@ const App = () => {
             },
             {
               path: 'dashboard',
-              element: <Dashboard />
+              element: <Dashboard />,
             },
             {
               path: 'profile',
@@ -104,17 +106,21 @@ const App = () => {
               element: <Reports />
             },
           ]
+        },
+        {
+          path: '*',
+          element: <NotFound />
         }
       ]
     }
   ])
 
   return (
-    <>
+    <AppWithHealthCheck>
       <AuthInitializer />
       <RouterProvider router={router} />
-      <Toaster position={position} toastOptions={{ duration: 3000 }} />;
-    </>
+      <Toaster position={position} toastOptions={{ duration: 3000 }} />
+    </AppWithHealthCheck>
   )
 }
 
