@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { iconOptionsData } from '../../../../data/IconOptionsData';
+import { iconOptionsData } from '../../../../data/iconOptionsData.js';
 import FormInputField from '../FormComponents/FormInputField';
 import FormInputTextArea from '../FormComponents/FormInputTextArea';
 import FormInputSelect from '../FormComponents/FormInputSelect';
