@@ -1,5 +1,5 @@
 import React from 'react'
-import GroupListCardHeader from './groupListCard/groupListCardHeader';
+import GroupListCardHeader from './groupListCard/GroupListCardHeader';
 import GroupListCardBalance from './groupListCard/GroupListCardBalance';
 import GroupListCardsStats from './groupListCard/GroupListCardsStats';
 import GroupListCardFooter from './groupListCard/GroupListCardFooter';
