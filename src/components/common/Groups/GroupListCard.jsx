@@ -4,7 +4,7 @@ import GroupListCardBalance from './groupListCard/GroupListCardBalance';
 import GroupListCardsStats from './groupListCard/GroupListCardsStats';
 import GroupListCardFooter from './groupListCard/GroupListCardFooter';
 import GroupListCardMembersHeader from './groupListCard/GroupListCardMembersHeader';
-import GroupListCardMemberList from './groupListCard/groupListCardMemberList';
+import GroupListCardMemberList from './groupListCard/GroupListCardMemberList';
 
 const GroupListCard = ({ group }) => {
 
